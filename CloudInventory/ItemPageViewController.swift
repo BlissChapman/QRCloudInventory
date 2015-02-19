@@ -8,6 +8,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var subtitleTextField: UITextField!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var actionButton: UIBarButtonItem!
+    @IBOutlet weak var cameraButton: UIBarButtonItem!
     
     var qrCode: UIImage? {
         didSet {
@@ -62,7 +64,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func actionButtonTapped(sender: UIBarButtonItem) {
-        self.presentViewController(generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text), animated: true, completion: nil)
+        generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text)
     }
     
     @IBAction func cameraTapped(sender: AnyObject) {
@@ -114,10 +116,15 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     //Making Action Sheet
-    func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) -> UIAlertController {
+    func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) {
         var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in
-            self.utilitiesHelper.printFile(qrCodeToPrint, image: qrCodeImage, jobTitle: currentItemTitle)
+            var controller = self.utilitiesHelper.printFile(qrCodeToPrint, image: qrCodeImage, jobTitle: self.titleTextField.text)
+            if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+                controller?.presentFromBarButtonItem(self.actionButton, animated: true, completionHandler: nil)
+            } else {
+                controller?.presentAnimated(true, completionHandler: nil)
+            }
         }))
         actionSheet.addAction(UIAlertAction(title: "Email Item", style: UIAlertActionStyle.Default, handler: { action in
             
@@ -125,7 +132,11 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
         }))
-        return actionSheet
+        
+        actionSheet.popoverPresentationController?.barButtonItem = actionButton
+        actionSheet.popoverPresentationController?.sourceView = self.view
+        
+        self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
     //CHOOSING/TAKING A PHOTO
@@ -141,9 +152,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                     
                 }))
             }
-            photoActionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: {action in
+            photoActionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {action in
                 photoActionSheet.dismissViewControllerAnimated(true, completion: nil)
             }))
+            
+            photoActionSheet.popoverPresentationController?.barButtonItem = cameraButton
+            photoActionSheet.popoverPresentationController?.sourceView = self.view
+            
             self.presentViewController(photoActionSheet, animated: true, completion: nil)
         } else {
             noCameraAlert()

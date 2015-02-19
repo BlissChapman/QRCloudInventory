@@ -31,7 +31,7 @@ class Helper {
     func generateIdString(title: String, subtitle: String, notes: String) -> String {
         var randomIdentifier: Int = Int(arc4random())
         var randomIdentifier2: Int = Int(arc4random())
-        return "1234"//String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
+        return String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
     }
     
     func convertQRCodeToData(qrCodeImage: UIImage) -> NSData {
@@ -44,21 +44,22 @@ class Helper {
     }
     
     //PRINTING
-    func printFile(data: NSData, image: UIImage, jobTitle: String) {
+    func printFile(data: NSData, image: UIImage, jobTitle: String) -> UIPrintInteractionController? {
+        var controller: UIPrintInteractionController?
         if UIPrintInteractionController.canPrintData(data) {
-            var controller: UIPrintInteractionController = UIPrintInteractionController.sharedPrintController()!
-            controller.printingItem = data
+            controller = UIPrintInteractionController.sharedPrintController()!
+            controller!.printingItem = data
             
             let printInfo = UIPrintInfo(dictionary: nil)!
             printInfo.outputType = UIPrintInfoOutputType.General
             printInfo.jobName = jobTitle
-            controller.printInfo = printInfo
+            controller!.printInfo = printInfo
             
             let formatter = UIPrintFormatter()
             formatter.maximumContentWidth = 50
             formatter.maximumContentHeight = 50
             formatter.contentInsets = UIEdgeInsets(top: 72, left: 72, bottom: 72, right: 72)
-            controller.printFormatter = formatter
+            controller!.printFormatter = formatter
             
             //            var pageRenderer = UIPrintPageRenderer()
             //            UIGraphicsGetCurrentContext()
@@ -66,11 +67,12 @@ class Helper {
             //            pageRenderer.drawPageAtIndex(1, inRect: myPrintableRect)
             //            UIGraphicsEndImageContext()
             //            controller.printPageRenderer = pageRenderer
-            
-            controller.presentAnimated(true, completionHandler: nil)
+            return controller!
         } else {
             println("cannot print file at this time")
+            controller = nil
         }
+        return controller
     }
     
     //SCANNER

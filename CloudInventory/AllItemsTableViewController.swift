@@ -13,16 +13,11 @@ class AllItemsTableViewController: UITableViewController {
     
     var myInventory = [AnyObject]()
     
-    
     override func viewWillAppear(animated: Bool) {
         
         //Reload data from core data
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let frequency = NSFetchRequest(entityName: "InventoryItem")
-        
-        myInventory = context.executeFetchRequest(frequency, error: nil)!
-        //tableView.reloadData()
+        reloadData()
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -32,11 +27,6 @@ class AllItemsTableViewController: UITableViewController {
         
         var idStringRetrieved = ""
         var myPredicate = NSPredicate(format: "idString = %@", idStringRetrieved)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //Table View Data Source -
@@ -84,20 +74,29 @@ class AllItemsTableViewController: UITableViewController {
         }
     }
     
+    //Table View Refreshing
+    @IBAction func tableViewRefreshTriggered(sender: AnyObject) {
+        reloadData()
+        tableView.reloadData()
+        sender.endRefreshing()
+    }
+    
+    func reloadData() {
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let context: NSManagedObjectContext = appDelegate.managedObjectContext!
+        let frequency = NSFetchRequest(entityName: "InventoryItem")
+        
+        myInventory = context.executeFetchRequest(frequency, error: nil)!
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNew" {
             
         } else if segue.identifier == "update" {
             var selectedItem: CoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as CoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
-            //            myItemViewController.itemTitle = selectedItem.valueForKey("title") as String
-            //            myItemViewController.itemSubtitle = selectedItem.valueForKey("subtitle") as String
-            //            myItemViewController.itemInfo = selectedItem.valueForKey("info") as String
-            //            myItemViewController.itemPhoto = selectedItem.valueForKey("photo") as? NSData
             myItemPageViewController.existingItem = selectedItem
-            //println(itemDictionary)
-            
-        } else if segue.identifier == "toCamera" {
+        } else if segue.identifier == "toScanner" {
             
         }
     }

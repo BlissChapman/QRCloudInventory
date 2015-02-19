@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A50745841A954F9400B83B60 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A50745831A954F9400B83B60 /* beep.mp3 */; };
+		A547D38C1A96449A00BD7D78 /* beep-07.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A547D38B1A96449A00BD7D78 /* beep-07.mp3 */; };
 		A56B5FB81A92893E0062608C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FB71A92893E0062608C /* AppDelegate.swift */; };
 		A56B5FBB1A92893E0062608C /* CloudInventory.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FB91A92893E0062608C /* CloudInventory.xcdatamodeld */; };
 		A56B5FBD1A92893E0062608C /* ItemPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FBC1A92893E0062608C /* ItemPageViewController.swift */; };
@@ -32,7 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A50745831A954F9400B83B60 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
+		A547D38B1A96449A00BD7D78 /* beep-07.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "beep-07.mp3"; sourceTree = "<group>"; };
 		A56B5FB21A92893E0062608C /* CloudInventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudInventory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A56B5FB61A92893E0062608C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A56B5FB71A92893E0062608C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +95,7 @@
 				A56B5FDC1A928BBC0062608C /* ScannerViewController.swift */,
 				A56B5FC11A92893E0062608C /* Images.xcassets */,
 				A56B5FC31A92893E0062608C /* LaunchScreen.xib */,
+				A547D38B1A96449A00BD7D78 /* beep-07.mp3 */,
 				A56B5FB91A92893E0062608C /* CloudInventory.xcdatamodeld */,
 				A56B5FB51A92893E0062608C /* Supporting Files */,
 			);
@@ -107,7 +108,6 @@
 				A56B5FB71A92893E0062608C /* AppDelegate.swift */,
 				A56B5FE01A9294210062608C /* CoreDataModel.swift */,
 				A5EE67B91A93E61A002A5A9B /* Helper.swift */,
-				A50745831A954F9400B83B60 /* beep.mp3 */,
 				A56B5FB61A92893E0062608C /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -211,8 +211,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A56B5FC01A92893E0062608C /* Main.storyboard in Resources */,
+				A547D38C1A96449A00BD7D78 /* beep-07.mp3 in Resources */,
 				A56B5FC51A92893E0062608C /* LaunchScreen.xib in Resources */,
-				A50745841A954F9400B83B60 /* beep.mp3 in Resources */,
 				A56B5FC21A92893E0062608C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

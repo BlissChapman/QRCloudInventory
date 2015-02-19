@@ -9,11 +9,13 @@
 import Foundation
 import CoreImage
 import UIKit
+import AVFoundation
 
 class Helper {
     
     init() {}
     
+    var audioPlayer = AVAudioPlayer()
     
     //QR CODES
     func generateQRCodeForString(stringToBeEncoded: String) -> UIImage {
@@ -29,7 +31,7 @@ class Helper {
     func generateIdString(title: String, subtitle: String, notes: String) -> String {
         var randomIdentifier: Int = Int(arc4random())
         var randomIdentifier2: Int = Int(arc4random())
-        return String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
+        return "1234"//String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
     }
     
     func convertQRCodeToData(qrCodeImage: UIImage) -> NSData {
@@ -71,15 +73,20 @@ class Helper {
         }
     }
     
-    //DISPLAY ACTION SHEET FOR ITEM
-    func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) -> UIAlertController {
-        var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in
-            self.printFile(qrCodeToPrint, image: qrCodeImage, jobTitle: currentItemTitle)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Email Item", style: UIAlertActionStyle.Default, handler: { action in
-            
-        }))
-        return actionSheet
+    //SCANNER
+    func playBeepSound() {
+        let url = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("beep-07", ofType: "mp3")!)
+        var error: NSError?
+        if let beepSound = url {
+            audioPlayer = AVAudioPlayer(contentsOfURL: beepSound, error: &error)
+            audioPlayer.volume = 1.0
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            if error != nil {
+                println(error?.description)
+            }
+        }
     }
+    
+    
 }

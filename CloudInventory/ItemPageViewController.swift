@@ -40,6 +40,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
             
             displayItemInfo()
+            
+            println(saveButton.title)
             saveButton.title = "Done"
         }
     }
@@ -60,10 +62,11 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func actionButtonTapped(sender: UIBarButtonItem) {
-        self.presentViewController(utilitiesHelper.generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text), animated: true, completion: nil)
+        self.presentViewController(generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text), animated: true, completion: nil)
     }
     
     @IBAction func cameraTapped(sender: AnyObject) {
+        println("camera tapped")
         createPhotoActionSheet()
     }
     
@@ -110,6 +113,21 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         myContext.save(nil)
     }
     
+    //Making Action Sheet
+    func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) -> UIAlertController {
+        var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in
+            self.utilitiesHelper.printFile(qrCodeToPrint, image: qrCodeImage, jobTitle: currentItemTitle)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Email Item", style: UIAlertActionStyle.Default, handler: { action in
+            
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        return actionSheet
+    }
+    
     //CHOOSING/TAKING A PHOTO
     func createPhotoActionSheet() {
         var photoActionSheet = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
@@ -127,6 +145,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                 photoActionSheet.dismissViewControllerAnimated(true, completion: nil)
             }))
             self.presentViewController(photoActionSheet, animated: true, completion: nil)
+        } else {
+            noCameraAlert()
         }
     }
     
@@ -158,6 +178,14 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         
         self.presentViewController(picker, animated: true, completion: nil)
+    }
+    
+    func noCameraAlert() {
+        var noCameraAlert = UIAlertController(title: "Error", message: "Device has no camera", preferredStyle: .Alert)
+        noCameraAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        self.presentViewController(noCameraAlert, animated: true, completion: nil)
     }
     
 }

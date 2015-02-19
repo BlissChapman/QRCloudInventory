@@ -45,34 +45,33 @@ class Helper {
     func printFile(data: NSData, image: UIImage, jobTitle: String) {
         if UIPrintInteractionController.canPrintData(data) {
             var controller: UIPrintInteractionController = UIPrintInteractionController.sharedPrintController()!
-            controller.printingItem = image
+            controller.printingItem = data
             
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.outputType = UIPrintInfoOutputType.Grayscale
+            let printInfo = UIPrintInfo(dictionary: nil)!
+            printInfo.outputType = UIPrintInfoOutputType.General
             printInfo.jobName = jobTitle
             controller.printInfo = printInfo
             
             let formatter = UIPrintFormatter()
-            formatter.drawInRect(CGRectMake(100, 100, 50, 50), forPageAtIndex: 1)
-            //formatter.contentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 100, right: 100)
+            formatter.maximumContentWidth = 50
+            formatter.maximumContentHeight = 50
+            formatter.contentInsets = UIEdgeInsets(top: 72, left: 72, bottom: 72, right: 72)
             controller.printFormatter = formatter
-//            var printInfo = UIPrintInfo()
-//            printInfo.outputType = UIPrintInfoOutputType.General
-//            printInfo.jobName = jobTitle
             
-//            var pageRenderer = UIPrintPageRenderer()
-//            UIGraphicsGetCurrentContext()
-//            var myPrintableRect = CGRectMake(100, 100, 100, 100)
-//            pageRenderer.drawPageAtIndex(1, inRect: myPrintableRect)
-//            UIGraphicsEndImageContext()
-//            controller.printPageRenderer = pageRenderer
+            //            var pageRenderer = UIPrintPageRenderer()
+            //            UIGraphicsGetCurrentContext()
+            //            var myPrintableRect = CGRectMake(100, 100, 100, 100)
+            //            pageRenderer.drawPageAtIndex(1, inRect: myPrintableRect)
+            //            UIGraphicsEndImageContext()
+            //            controller.printPageRenderer = pageRenderer
             
             controller.presentAnimated(true, completionHandler: nil)
+        } else {
+            println("cannot print file at this time")
         }
-        
     }
     
-    //DISPLAY ACTION SHEET WITH TITLES
+    //DISPLAY ACTION SHEET FOR ITEM
     func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) -> UIAlertController {
         var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in

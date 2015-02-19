@@ -89,11 +89,9 @@
 		A56B5FB41A92893E0062608C /* CloudInventory */ = {
 			isa = PBXGroup;
 			children = (
-				A56B5FB71A92893E0062608C /* AppDelegate.swift */,
 				A56B5FBE1A92893E0062608C /* Main.storyboard */,
 				A56B5FDA1A928B670062608C /* AllItemsTableViewController.swift */,
 				A56B5FBC1A92893E0062608C /* ItemPageViewController.swift */,
-				A56B5FE01A9294210062608C /* CoreDataModel.swift */,
 				A56B5FDC1A928BBC0062608C /* ScannerViewController.swift */,
 				A56B5FC11A92893E0062608C /* Images.xcassets */,
 				A56B5FC31A92893E0062608C /* LaunchScreen.xib */,
@@ -106,6 +104,8 @@
 		A56B5FB51A92893E0062608C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A56B5FB71A92893E0062608C /* AppDelegate.swift */,
+				A56B5FE01A9294210062608C /* CoreDataModel.swift */,
 				A5EE67B91A93E61A002A5A9B /* Helper.swift */,
 				A50745831A954F9400B83B60 /* beep.mp3 */,
 				A56B5FB61A92893E0062608C /* Info.plist */,

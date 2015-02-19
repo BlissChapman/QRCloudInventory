@@ -1,12 +1,13 @@
 import UIKit
 import CoreData
 
-class ItemPageViewController: UIViewController {
+class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var qrCodeImageView: UIImageView!
     @IBOutlet weak var notesTextView: UITextView!
     @IBOutlet weak var subtitleTextField: UITextField!
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var qrCode: UIImage? {
         didSet {
@@ -39,6 +40,7 @@ class ItemPageViewController: UIViewController {
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
             
             displayItemInfo()
+            saveButton.title = "Done"
         }
     }
     
@@ -60,6 +62,11 @@ class ItemPageViewController: UIViewController {
     @IBAction func actionButtonTapped(sender: UIBarButtonItem) {
         self.presentViewController(utilitiesHelper.generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text), animated: true, completion: nil)
     }
+    
+    @IBAction func cameraTapped(sender: AnyObject) {
+        createPhotoActionSheet()
+    }
+    
     
     func displayItemInfo() {
         if itemQrCodeNSData != nil {
@@ -101,6 +108,56 @@ class ItemPageViewController: UIViewController {
         }
         
         myContext.save(nil)
+    }
+    
+    //CHOOSING/TAKING A PHOTO
+    func createPhotoActionSheet() {
+        var photoActionSheet = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+            photoActionSheet.addAction((UIAlertAction(title: "Take New", style: UIAlertActionStyle.Default, handler: {action in
+                self.takeNew()
+            })))
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary){
+                photoActionSheet.addAction(UIAlertAction(title: "Choose from Photo Library", style: UIAlertActionStyle.Default, handler: {action in
+                    self.selectFromLibrary()
+                    
+                }))
+            }
+            photoActionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: {action in
+                photoActionSheet.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(photoActionSheet, animated: true, completion: nil)
+        }
+    }
+    
+    func takeNew() {
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            let myAlertView = UIAlertView()
+            myAlertView.title = "Error: Device has no camera"
+            myAlertView.delegate = nil
+            myAlertView.show()
+        }
+        var picker: UIImagePickerController = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = UIImagePickerControllerSourceType.Camera
+        
+        self.presentViewController(picker, animated: true, completion: nil)
+    }
+    
+    func selectFromLibrary() {
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
+            let myAlertView = UIAlertView()
+            myAlertView.title = "Error: Device has no photo library"
+            myAlertView.delegate = nil
+            myAlertView.show()
+        }
+        var picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        
+        self.presentViewController(picker, animated: true, completion: nil)
     }
     
 }

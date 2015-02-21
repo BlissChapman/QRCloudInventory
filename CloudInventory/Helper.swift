@@ -34,39 +34,40 @@ class Helper {
         return String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
     }
     
-    func convertQRCodeToData(qrCodeImage: UIImage) -> NSData {
+    func convertQRCodeToData(qrCodeImage: UIImage, jpeg: Bool) -> NSData {
         UIGraphicsBeginImageContext(qrCodeImage.size)
         qrCodeImage.drawInRect(CGRectMake(0, 0, qrCodeImage.size.width, qrCodeImage.size.height))
         var newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        if jpeg == true {
+            var jpegData = UIImageJPEGRepresentation(newImage, 1.0)
+            return jpegData
+        }
         var pngData = UIImagePNGRepresentation(newImage)
         return pngData
     }
     
     //PRINTING
-    func printFile(data: NSData, image: UIImage, jobTitle: String) -> UIPrintInteractionController? {
+    func printFile(data: NSData, imageView: UIImageView, jobTitle: String) -> UIPrintInteractionController? {
+        
+        //create pdf from image
+        var pdfData = NSMutableData(data: data)
+        UIGraphicsBeginPDFContextToData(pdfData, CGRectZero, nil)
+        UIGraphicsBeginPDFPageWithInfo(CGRectMake(-20, 20, 500, 500), nil)
+    
+        imageView.layer.renderInContext(UIGraphicsGetCurrentContext())
+        UIGraphicsEndPDFContext()
+        
         var controller: UIPrintInteractionController?
         if UIPrintInteractionController.canPrintData(data) {
             controller = UIPrintInteractionController.sharedPrintController()!
-            controller!.printingItem = data
+            controller!.printingItem = pdfData
             
             let printInfo = UIPrintInfo(dictionary: nil)!
             printInfo.outputType = UIPrintInfoOutputType.General
             printInfo.jobName = jobTitle
             controller!.printInfo = printInfo
             
-            let formatter = UIPrintFormatter()
-            formatter.maximumContentWidth = 50
-            formatter.maximumContentHeight = 50
-            formatter.contentInsets = UIEdgeInsets(top: 72, left: 72, bottom: 72, right: 72)
-            controller!.printFormatter = formatter
-            
-            //            var pageRenderer = UIPrintPageRenderer()
-            //            UIGraphicsGetCurrentContext()
-            //            var myPrintableRect = CGRectMake(100, 100, 100, 100)
-            //            pageRenderer.drawPageAtIndex(1, inRect: myPrintableRect)
-            //            UIGraphicsEndImageContext()
-            //            controller.printPageRenderer = pageRenderer
             return controller!
         } else {
             println("cannot print file at this time")

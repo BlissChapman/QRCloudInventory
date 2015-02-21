@@ -3,6 +3,7 @@ import CoreData
 
 class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var qrCodeImageView: UIImageView!
     @IBOutlet weak var notesTextView: UITextView!
     @IBOutlet weak var subtitleTextField: UITextField!
@@ -14,6 +15,11 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     var qrCode: UIImage? {
         didSet {
             qrCodeImageView.image = qrCode
+        }
+    }
+    var itemImage: UIImage? {
+        didSet {
+            pictureImageView.image = itemImage
         }
     }
     var stringToEncode: String?
@@ -64,7 +70,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func actionButtonTapped(sender: UIBarButtonItem) {
-        generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text)
+        generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!, jpeg: false), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text)
     }
     
     @IBAction func cameraTapped(sender: AnyObject) {
@@ -76,6 +82,9 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     func displayItemInfo() {
         if itemQrCodeNSData != nil {
             qrCode = UIImage(data: itemQrCodeNSData!)
+        }
+        if itemPhoto != nil {
+            itemImage = UIImage(data: itemPhoto!)
         }
         titleTextField.text = itemTitle
         subtitleTextField.text = itemSubtitle
@@ -94,11 +103,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             existingItem?.title = titleTextField.text
             existingItem?.subtitle = subtitleTextField.text
             existingItem?.notes = notesTextView.text
+            existingItem?.photoOfItem = UIImagePNGRepresentation(pictureImageView.image)
         } else if existingItem == nil { //creating new item
             newItem = CoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
             newItem?.title = titleTextField.text
             newItem?.subtitle = subtitleTextField.text
             newItem?.notes = notesTextView.text
+            newItem?.photoOfItem = UIImagePNGRepresentation(itemImage)
             
             //if qr code doesn't exist when save is tapped, generate a new one.
             if qrCode == nil {
@@ -107,7 +118,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                 newItem?.idString = stringToEncode!
             }
             if qrCode != nil {
-                var qrCodeNSData = utilitiesHelper.convertQRCodeToData(qrCode!)
+                var qrCodeNSData = utilitiesHelper.convertQRCodeToData(qrCode!, jpeg: true)
                 newItem!.qrCodeImage = qrCodeNSData
             }
         }
@@ -119,7 +130,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) {
         var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in
-            var controller = self.utilitiesHelper.printFile(qrCodeToPrint, image: qrCodeImage, jobTitle: self.titleTextField.text)
+            var controller = self.utilitiesHelper.printFile(qrCodeToPrint, imageView: self.qrCodeImageView, jobTitle: self.titleTextField.text)
             if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
                 controller?.presentFromBarButtonItem(self.actionButton, animated: true, completionHandler: nil)
             } else {
@@ -201,6 +212,19 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             self.dismissViewControllerAnimated(true, completion: nil)
         }))
         self.presentViewController(noCameraAlert, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
+        println("made it to here")
+        itemImage = info.objectForKey("UIImagePickerControllerEditedImage") as? UIImage
+        if let image = itemImage {
+            println("item Image is not in fact nil")
+        }
+        picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

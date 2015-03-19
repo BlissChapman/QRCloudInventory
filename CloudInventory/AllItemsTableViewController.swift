@@ -12,10 +12,11 @@ import CoreData
 class AllItemsTableViewController: UITableViewController {
     
     var myInventory = [AnyObject]()
+    var itemsWithNoFolders = [AnyObject]()
+    var myFolders = [AnyObject]()
+    var arrayToDisplay = [AnyObject]()
     
     override func viewWillAppear(animated: Bool) {
-        
-        //Reload data from core data
         reloadData()
         tableView.reloadData()
     }
@@ -35,16 +36,25 @@ class AllItemsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.myInventory.count
+        //println("there should be \(self.itemsWithNoFolders.count + self.myFolders.count) items")
+        return self.itemsWithNoFolders.count + self.myFolders.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as UITableViewCell!
+        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell!
         
-        if let oneItem = self.myInventory[indexPath.row] as? CoreDataModel {
-            cell.textLabel?.text = oneItem.title
-            cell.detailTextLabel?.text = oneItem.subtitle
+        let itemToDisplay: AnyObject = self.arrayToDisplay[indexPath.row]
+        if itemToDisplay is FolderCoreDataModel {
+            //println("ITS A FOLDER :D")
+            cell.textLabel?.text = itemToDisplay.name
+            cell.imageView?.image = UIImage(contentsOfFile: "FolderImage.png")
+        } else if itemToDisplay is ItemCoreDataModel {
+            //println("NOT A FOLDER :D")
+            //println("@indexPath \(indexPath.row)")
+            let item = itemToDisplay as! ItemCoreDataModel
+            cell.textLabel?.text = itemToDisplay.title
+            cell.detailTextLabel?.text = item.subtitle
         }
         
         return cell
@@ -58,11 +68,11 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(myInventory[indexPath.row] as NSManagedObject)
+            context.deleteObject(myInventory[indexPath.row] as! NSManagedObject)
             
             myInventory.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
@@ -82,22 +92,42 @@ class AllItemsTableViewController: UITableViewController {
     }
     
     func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let frequency = NSFetchRequest(entityName: "InventoryItem")
+        let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
+        let folderFrequency = NSFetchRequest(entityName: "Folder")
         
-        myInventory = context.executeFetchRequest(frequency, error: nil)!
+        var err: NSError?
+        myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
+        myFolders = context.executeFetchRequest(folderFrequency, error: &err)!
+        itemsWithNoFolders = []
+        
+        println("there are \(myInventory.count) items to put in either a folder or to leave as a regular item...there are \(myFolders.count) folders")
+        for index in 0 ..< myInventory.count {
+            println(index)
+            if myInventory[index] is FolderCoreDataModel {
+            } else {
+                itemsWithNoFolders.append(myInventory[index])
+            }
+        }
+        arrayToDisplay = myFolders + itemsWithNoFolders
+        println("there are \(arrayToDisplay.count) items to display")
+    }
+    
+    func reloadDataForFolder() {
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNew" {
             
         } else if segue.identifier == "update" {
-            var selectedItem: CoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as CoreDataModel
-            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
+            println(self.tableView.indexPathForSelectedRow()!.row)
+            var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row - myFolders.count] as! ItemCoreDataModel
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
             myItemPageViewController.existingItem = selectedItem
         } else if segue.identifier == "toScanner" {
-            
+        
         }
     }
 }

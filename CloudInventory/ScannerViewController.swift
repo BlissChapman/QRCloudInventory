@@ -21,7 +21,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     lazy var utilitiesHelper = Helper()
     
-    var selectedItem: CoreDataModel?
+    var selectedItem: ItemCoreDataModel?
     
     var myFetchRequestArray: [AnyObject] = []
     
@@ -36,7 +36,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     func setupScanner() {
-        myInput = AVCaptureDeviceInput.deviceInputWithDevice(myDevice, error: nil) as AVCaptureDeviceInput
+        myInput = AVCaptureDeviceInput.deviceInputWithDevice(myDevice, error: nil) as! AVCaptureDeviceInput
         
         mySession.addOutput(myOutput)
         mySession.addInput(myInput as AVCaptureInput)
@@ -44,7 +44,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         myOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
         myOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
         
-        preview = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as AVCaptureVideoPreviewLayer
+        preview = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as! AVCaptureVideoPreviewLayer
         preview.videoGravity = AVLayerVideoGravityResizeAspectFill
         preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
         
@@ -66,7 +66,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         mySession.stopRunning()
         performSegueWithIdentifier("toTableView", sender: self)
         
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")
@@ -90,7 +90,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 self.mySession.startRunning()
             }))
         } else {
-            selectedItem = myFetchRequestArray[0] as? CoreDataModel
+            selectedItem = myFetchRequestArray[0] as? ItemCoreDataModel
             println("itemTitle is = \(selectedItem?.title)")
             println("itemSubtitle = \(selectedItem?.subtitle)")
             println("itemInfo = \(selectedItem?.notes)")
@@ -110,7 +110,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "toItemPage" {
-            let myItemViewController = segue.destinationViewController as ItemPageViewController
+            let myItemViewController = segue.destinationViewController as! ItemPageViewController
             myItemViewController.existingItem = selectedItem
         }
     }

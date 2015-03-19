@@ -1,8 +1,10 @@
 import UIKit
 import CoreData
 
-class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
+    @IBOutlet weak var textViewToolbar: UIToolbar!
+    @IBOutlet weak var themeImageView: UIImageView!
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var qrCodeImageView: UIImageView!
     @IBOutlet weak var notesTextView: UITextView!
@@ -20,25 +22,65 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     var itemImage: UIImage? {
         didSet {
             pictureImageView.image = itemImage
+            themeImageView.image = itemImage
+            primaryColor = UIColor(patternImage: itemImage!).colorWithAlphaComponent(0.5)
+        }
+    }
+    var primaryColor: UIColor? {
+        didSet{
+            notesTextView.backgroundColor = primaryColor
+            //            var primaryHue = UnsafeMutablePointer<CGFloat>()
+            //            var primarySaturation = UnsafeMutablePointer<CGFloat>()
+            //            var primaryBrightness = UnsafeMutablePointer<CGFloat>()
+            //            var primaryAlpha = UnsafeMutablePointer<CGFloat>()
+            //            println(primaryColor)
+            //            if primaryColor?.getHue(primaryHue, saturation: primarySaturation, brightness: primaryBrightness, alpha: primaryAlpha) == true {
+            //                println(primaryHue)
+            //                println(primarySaturation)
+            //                println(primaryAlpha)
+            //                complementaryColor =
+        }
+    }
+    
+    var complementaryColor: UIColor? {
+        didSet{
+            UIButton.appearance().tintColor = complementaryColor
         }
     }
     var stringToEncode: String?
     lazy var utilitiesHelper = Helper()
     
     //All properties for updating an existing item's info
-    var existingItem: CoreDataModel?
+    var existingItem: ItemCoreDataModel?
     var itemTitle: String?
     var itemSubtitle: String?
     var itemNotes: String?
     var itemPhoto: NSData?
     var itemQrCodeNSData: NSData?
     
+    var selectedItemNumber = 9
+    
+    var folderName: String? {
+        didSet {
+            println("folderName = \(folderName)")
+            println(itemTitle)
+            println("selectedItemNumber = \(selectedItemNumber)")
+            //saveAll()
+        }
+    }
+    
     //All properties for creating a new item
-    var newItem: CoreDataModel?
+    var newItem: ItemCoreDataModel?
     
     
     override func viewWillAppear(animated: Bool) {
-        
+        println("viewWillAppear is called here...")
+    }
+    
+    override func viewDidLoad() {
+        println("viewDidLoad is called here...")
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
         //existingItem is set based on the table view row selected
         if existingItem != nil {
             itemTitle = existingItem!.title
@@ -46,19 +88,16 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemNotes = existingItem!.notes
             itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
-            
+            folderName = existingItem!.folder
+            println("folderName retrieved from core data is \(existingItem!.folder)")
             displayItemInfo()
-            
-            println(saveButton.title)
             saveButton.title = "Done"
         }
+        textViewToolbar.removeFromSuperview()
+        titleTextField.delegate = self
+        subtitleTextField.delegate = self
+        notesTextView.inputAccessoryView = textViewToolbar
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
     
     @IBAction func saveTapped(sender: AnyObject) {
         saveAll()
@@ -74,10 +113,22 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func cameraTapped(sender: AnyObject) {
-        println("camera tapped")
         createPhotoActionSheet()
     }
     
+    @IBAction func doneTyping(sender: UIBarButtonItem) {
+        notesTextView.resignFirstResponder()
+    }
+//    @IBAction func folderTapped(sender: UIBarButtonItem) {
+//        var folderSelectionPopover = UIPopoverController(contentViewController: FolderSelectionTableViewController())
+//        folderSelectionPopover.presentPopoverFromBarButtonItem(organizeButton, permittedArrowDirections: .Up, animated: true)
+//    }
+    
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
     func displayItemInfo() {
         if itemQrCodeNSData != nil {
@@ -92,7 +143,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func saveAll() {
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")
@@ -103,13 +154,25 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             existingItem?.title = titleTextField.text
             existingItem?.subtitle = subtitleTextField.text
             existingItem?.notes = notesTextView.text
-            existingItem?.photoOfItem = UIImagePNGRepresentation(pictureImageView.image)
+            if let pngOfPhoto = UIImagePNGRepresentation(pictureImageView.image) {
+                existingItem?.photoOfItem = pngOfPhoto
+            }
+            existingItem?.dateLastEdited = NSDate()
+            println("The folder name to be saved: \(folderName)")
+            existingItem?.folder = folderName
+            println("The folder name that was saved: \(folderName)")
         } else if existingItem == nil { //creating new item
-            newItem = CoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
+            newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
             newItem?.title = titleTextField.text
             newItem?.subtitle = subtitleTextField.text
             newItem?.notes = notesTextView.text
-            newItem?.photoOfItem = UIImagePNGRepresentation(itemImage)
+            newItem?.dateLastEdited = NSDate()
+            newItem?.dateCreated = NSDate()
+            println(folderName)
+            newItem?.folder = folderName
+            if let pngImage = UIImageJPEGRepresentation(itemImage, 1.0) {
+                newItem?.photoOfItem = pngImage
+            }
             
             //if qr code doesn't exist when save is tapped, generate a new one.
             if qrCode == nil {
@@ -122,14 +185,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                 newItem!.qrCodeImage = qrCodeNSData
             }
         }
-        
         myContext.save(nil)
     }
     
     //Making Action Sheet
     func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) {
         var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Print", style: UIAlertActionStyle.Default, handler: { action in
+        actionSheet.addAction(UIAlertAction(title: "Print Code", style: UIAlertActionStyle.Default, handler: { action in
             var controller = self.utilitiesHelper.printFile(qrCodeToPrint, imageView: self.qrCodeImageView, jobTitle: self.titleTextField.text)
             if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
                 controller?.presentFromBarButtonItem(self.actionButton, animated: true, completionHandler: nil)
@@ -152,34 +214,44 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     
     //CHOOSING/TAKING A PHOTO
     func createPhotoActionSheet() {
-        var photoActionSheet = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
-            photoActionSheet.addAction((UIAlertAction(title: "Take New", style: UIAlertActionStyle.Default, handler: {action in
-                self.takeNew()
-            })))
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary){
-                photoActionSheet.addAction(UIAlertAction(title: "Choose from Photo Library", style: UIAlertActionStyle.Default, handler: {action in
-                    self.selectFromLibrary()
-                    
+        if utilitiesHelper.determinePermissionStatus() == true {
+            var camera = false
+            var photoActionSheet = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+                camera = true
+                photoActionSheet.addAction(UIAlertAction(title: "Take New", style: UIAlertActionStyle.Default, handler: { action in
+                    self.takeNew()
                 }))
+            }
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
+                camera = true
+                photoActionSheet.addAction(UIAlertAction(title: "Choose from Photo Library", style: UIAlertActionStyle.Default, handler: { action in
+                    self.selectFromLibrary()
+                }))
+            }
+            
+            if camera == false {
+                noCameraAlert()
+                return
             }
             photoActionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {action in
                 photoActionSheet.dismissViewControllerAnimated(true, completion: nil)
             }))
-            
-            photoActionSheet.popoverPresentationController?.barButtonItem = cameraButton
+            photoActionSheet.popoverPresentationController?.barButtonItem = self.cameraButton
             photoActionSheet.popoverPresentationController?.sourceView = self.view
             
             self.presentViewController(photoActionSheet, animated: true, completion: nil)
         } else {
-            noCameraAlert()
+            noCameraPermissionAlert()
         }
     }
+    
     
     func takeNew() {
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let myAlertView = UIAlertView()
-            myAlertView.title = "Error: Device has no camera"
+            myAlertView.title = "Error: Device has no camera or photo library."
             myAlertView.delegate = nil
             myAlertView.show()
         }
@@ -214,17 +286,50 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         self.presentViewController(noCameraAlert, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
-        println("made it to here")
-        itemImage = info.objectForKey("UIImagePickerControllerEditedImage") as? UIImage
-        if let image = itemImage {
-            println("item Image is not in fact nil")
-        }
+    func noCameraPermissionAlert() {
+        var noCameraPermissionAlert = UIAlertController(title: "Permission Required", message: "We don't have permission to use your camera or photos.  Please revise your privacy settings. ", preferredStyle: .Alert)
+        noCameraPermissionAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        noCameraPermissionAlert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.Default, handler: { action in
+            var appSettings: NSURL = NSURL(string: UIApplicationOpenSettingsURLString)!
+            UIApplication.sharedApplication().openURL(appSettings)
+        }))
+        self.presentViewController(noCameraPermissionAlert, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        itemImage = info["UIImagePickerControllerEditedImage"] as? UIImage
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    //popover delegate
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "TextAlignment":
+                if let vc = segue.destinationViewController as? TextAlignmentViewController {
+                    if let ppc = vc.popoverPresentationController {
+                        ppc.delegate = self
+                    }
+                }
+            case "FolderSelection":
+                if let vc = segue.destinationViewController as? FolderSelectionTableViewController {
+                    if let ppc = vc.popoverPresentationController {
+                        ppc.delegate = self
+                    }
+                }
+            default: break
+            }
+        }
     }
     
 }

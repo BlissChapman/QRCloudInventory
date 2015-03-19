@@ -9,12 +9,18 @@
 import Foundation
 import CoreData
 
-//@objc(CoreDataModel)
-class CoreDataModel: NSManagedObject {
+class ItemCoreDataModel: NSManagedObject {
     @NSManaged var title: String
     @NSManaged var subtitle: String
     @NSManaged var notes: String
     @NSManaged var photoOfItem: NSData
     @NSManaged var qrCodeImage: NSData
     @NSManaged var idString: String
+    @NSManaged var dateCreated: NSDate
+    @NSManaged var dateLastEdited: NSDate
+    @NSManaged var folder: String?
+}
+
+class FolderCoreDataModel: NSManagedObject {
+    @NSManaged var name: String
 }

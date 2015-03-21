@@ -20,6 +20,8 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
 
         nameTextField.delegate = self
+        self.preferredContentSize = CGSizeMake(nameTextField.frame.width, nameTextField.frame.height)
+        
         // Do any additional setup after loading the view.
     }
 

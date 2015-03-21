@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A51C45191ABD1E230020F0A8 /* CustomItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51C45181ABD1E230020F0A8 /* CustomItemTableViewCell.swift */; };
 		A52DBE8F1AAA840F007CEA3D /* Italics.png in Resources */ = {isa = PBXBuildFile; fileRef = A52DBE8E1AAA840F007CEA3D /* Italics.png */; };
 		A52DBE911AAA841F007CEA3D /* Redo.png in Resources */ = {isa = PBXBuildFile; fileRef = A52DBE901AAA841F007CEA3D /* Redo.png */; };
 		A52DBE931AAA8432007CEA3D /* Underline.png in Resources */ = {isa = PBXBuildFile; fileRef = A52DBE921AAA8432007CEA3D /* Underline.png */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A51C45181ABD1E230020F0A8 /* CustomItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomItemTableViewCell.swift; sourceTree = "<group>"; };
 		A52DBE8E1AAA840F007CEA3D /* Italics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Italics.png; sourceTree = "<group>"; };
 		A52DBE901AAA841F007CEA3D /* Redo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Redo.png; sourceTree = "<group>"; };
 		A52DBE921AAA8432007CEA3D /* Underline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Underline.png; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			children = (
 				A56B5FBE1A92893E0062608C /* Main.storyboard */,
 				A56B5FDA1A928B670062608C /* AllItemsTableViewController.swift */,
+				A51C45181ABD1E230020F0A8 /* CustomItemTableViewCell.swift */,
 				A5DFAAB61ABCEA360064FB6C /* TagsTableViewController.swift */,
 				A56B5FBC1A92893E0062608C /* ItemPageViewController.swift */,
 				A5C30E991AB1CA5B002DD285 /* FolderSelectionTableViewController.swift */,
@@ -343,6 +346,7 @@
 				A5DFAAB71ABCEA360064FB6C /* TagsTableViewController.swift in Sources */,
 				A5C30E9A1AB1CA5B002DD285 /* FolderSelectionTableViewController.swift in Sources */,
 				A5EE67BA1A93E61A002A5A9B /* Helper.swift in Sources */,
+				A51C45191ABD1E230020F0A8 /* CustomItemTableViewCell.swift in Sources */,
 				A56B5FBB1A92893E0062608C /* CloudInventory.xcdatamodeld in Sources */,
 				A5C30E9C1AB1D796002DD285 /* FolderCreationViewController.swift in Sources */,
 				A56B5FDB1A928B670062608C /* AllItemsTableViewController.swift in Sources */,

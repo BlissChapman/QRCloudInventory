@@ -12,9 +12,9 @@ import CoreData
 class AllItemsTableViewController: UITableViewController {
     
     var myInventory = [AnyObject]()
-    var itemsWithNoFolders = [AnyObject]()
-    var myFolders = [AnyObject]()
-    var arrayToDisplay = [AnyObject]()
+    //var itemsWithNoFolders = [AnyObject]()
+    //var myFolders = [AnyObject]()
+    //var arrayToDisplay = [AnyObject]()
     
     override func viewWillAppear(animated: Bool) {
         reloadData()
@@ -37,24 +37,29 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //println("there should be \(self.itemsWithNoFolders.count + self.myFolders.count) items")
-        return self.itemsWithNoFolders.count + self.myFolders.count
+        //return self.itemsWithNoFolders.count + self.myFolders.count
+        return myInventory.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as! CustomItemTableViewCell!
         
-        let itemToDisplay: AnyObject = self.arrayToDisplay[indexPath.row]
-        if itemToDisplay is FolderCoreDataModel {
-            //println("ITS A FOLDER :D")
-            cell.textLabel?.text = itemToDisplay.name
-            cell.imageView?.image = UIImage(contentsOfFile: "FolderImage.png")
-        } else if itemToDisplay is ItemCoreDataModel {
+        let itemToDisplay: AnyObject = self.myInventory[indexPath.row]
+        //        if itemToDisplay is FolderCoreDataModel {
+        //            //println("ITS A FOLDER :D")
+        //            cell.textLabel?.text = itemToDisplay.name
+        //            cell.imageView?.image = UIImage(named: "TagIcon.png")
+        // } else
+        if itemToDisplay is ItemCoreDataModel {
             //println("NOT A FOLDER :D")
             //println("@indexPath \(indexPath.row)")
             let item = itemToDisplay as! ItemCoreDataModel
-            cell.textLabel?.text = itemToDisplay.title
-            cell.detailTextLabel?.text = item.subtitle
+            cell.cellTitle.text = itemToDisplay.title
+            cell.backgroundImage.image = UIImage(data: item.photoOfItem)
+//            cell.textLabel?.text = itemToDisplay.title
+//            cell.detailTextLabel?.text = item.subtitle
+//            cell.imageView?.image = UIImage(data: item.photoOfItem)
         }
         
         return cell
@@ -99,19 +104,19 @@ class AllItemsTableViewController: UITableViewController {
         
         var err: NSError?
         myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
-        myFolders = context.executeFetchRequest(folderFrequency, error: &err)!
-        itemsWithNoFolders = []
+//        myFolders = context.executeFetchRequest(folderFrequency, error: &err)!
+//        itemsWithNoFolders = []
         
-        println("there are \(myInventory.count) items to put in either a folder or to leave as a regular item...there are \(myFolders.count) folders")
-        for index in 0 ..< myInventory.count {
-            println(index)
-            if myInventory[index] is FolderCoreDataModel {
-            } else {
-                itemsWithNoFolders.append(myInventory[index])
-            }
-        }
-        arrayToDisplay = myFolders + itemsWithNoFolders
-        println("there are \(arrayToDisplay.count) items to display")
+//        println("there are \(myInventory.count) items to put in either a folder or to leave as a regular item...there are \(myFolders.count) folders")
+//        for index in 0 ..< myInventory.count {
+//            println(index)
+//            if myInventory[index] is FolderCoreDataModel {
+//            } else {
+//                itemsWithNoFolders.append(myInventory[index])
+//            }
+//        }
+//        arrayToDisplay = myFolders + itemsWithNoFolders
+//        println("there are \(arrayToDisplay.count) items to display")
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -120,8 +125,9 @@ class AllItemsTableViewController: UITableViewController {
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "update" {
             println(self.tableView.indexPathForSelectedRow()!.row)
-            var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row - myFolders.count] as! ItemCoreDataModel
+            var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel// - myFolders.count] as! ItemCoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
+            myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)// - myFolders.count)
             myItemPageViewController.existingItem = selectedItem
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "toScanner" {

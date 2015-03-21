@@ -2,23 +2,25 @@ import UIKit
 import CoreData
 
 protocol ItemPageDataSource: class {
+    //NOTE: ALSO NEED TO PRESERVE INDEX OF SELECTED ITEM IN ARRAY so i can delete it if necessary
     //qr code, itemImage, primaryColor, complementaryColor, existingItem, itemTitle, itemSubtitle, itemNotes, itemPhoto (nsdata), itemQRCodeNSData, folderName, newItem
-//    func qrCodeForItemPage(sender: ItemPageViewController) -> UIImage?
-//    func itemImageForItemPage(sender: ItemPageViewController) -> UIImage?
-//    func primaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
-//    func complementaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
-//    func existingItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
-//    func itemTitleForItemPage(sender: ItemPageViewController) -> String?
-//    func itemSubtitleForItemPage(sender: ItemPageViewController) -> String?
-//    func itemNotesForItemPage(sender: ItemPageViewController) -> String?
-//    func itemPhotoForItemPage(sender: ItemPageViewController) -> NSData?
-//    func itemQRCodeNSDataForItemPage(sender: ItemPageViewController) -> NSData?
+    //    func qrCodeForItemPage(sender: ItemPageViewController) -> UIImage?
+    //    func itemImageForItemPage(sender: ItemPageViewController) -> UIImage?
+    //    func primaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
+    //    func complementaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
+    //    func existingItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
+    //    func itemTitleForItemPage(sender: ItemPageViewController) -> String?
+    //    func itemSubtitleForItemPage(sender: ItemPageViewController) -> String?
+    //    func itemNotesForItemPage(sender: ItemPageViewController) -> String?
+    //    func itemPhotoForItemPage(sender: ItemPageViewController) -> NSData?
+    //    func itemQRCodeNSDataForItemPage(sender: ItemPageViewController) -> NSData?
     func folderNameForItemPage(sender: ItemPageViewController) -> String?
-//    func newItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
+    //    func newItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
 }
 
 class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
+    @IBOutlet weak var trashButton: UIBarButtonItem!
     @IBOutlet weak var textViewToolbar: UIToolbar!
     @IBOutlet weak var themeImageView: UIImageView!
     @IBOutlet weak var pictureImageView: UIImageView!
@@ -76,6 +78,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     var itemPhoto: NSData?
     var itemQrCodeNSData: NSData?
     var folderName: String?//
+    var indexOfCurrentItemInMyInventoryArray: Int?
     
     //All properties for creating a new item
     var newItem: ItemCoreDataModel?
@@ -122,6 +125,40 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!, jpeg: false), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text)
     }
     
+    @IBAction func trashTapped(sender: UIBarButtonItem) {
+        var actionSheet = UIAlertController(title: "Trash", message: "Are you sure you want to delete this item?", preferredStyle: .ActionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { action in
+            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let context: NSManagedObjectContext = appDelegate.managedObjectContext!
+    
+            println("7")
+            if self.existingItem != nil {
+                println("6")
+                context.deleteObject(self.existingItem!)
+                println("just tried to delete the current existing object")
+            } else if self.newItem != nil {
+                println("5")
+                context.delete(self.newItem)
+            }
+            println("4")
+            var error: NSError? = nil
+            if !context.save(&error) {
+                abort()
+            }
+            self.navigationController?.popToRootViewControllerAnimated(true)
+            println("3")
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        println("2")
+        actionSheet.popoverPresentationController?.barButtonItem = trashButton
+        actionSheet.popoverPresentationController?.sourceView = self.view
+        
+        self.presentViewController(actionSheet, animated: true, completion: nil)
+        println("1")
+    }
+    
     @IBAction func cameraTapped(sender: AnyObject) {
         createPhotoActionSheet()
     }
@@ -129,10 +166,10 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBAction func doneTyping(sender: UIBarButtonItem) {
         notesTextView.resignFirstResponder()
     }
-//    @IBAction func folderTapped(sender: UIBarButtonItem) {
-//        var folderSelectionPopover = UIPopoverController(contentViewController: FolderSelectionTableViewController())
-//        folderSelectionPopover.presentPopoverFromBarButtonItem(organizeButton, permittedArrowDirections: .Up, animated: true)
-//    }
+    //    @IBAction func folderTapped(sender: UIBarButtonItem) {
+    //        var folderSelectionPopover = UIPopoverController(contentViewController: FolderSelectionTableViewController())
+    //        folderSelectionPopover.presentPopoverFromBarButtonItem(organizeButton, permittedArrowDirections: .Up, animated: true)
+    //    }
     
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -336,14 +373,14 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
-//                    vc.tempItemTitle = titleTextField.text
-//                    vc.tempExistingItem = existingItem
-//                    vc.tempNewItem = newItem
-//                    vc.itemSubtitle = subtitleTextField.text
-//                    vc.tempItemNotes = notesTextView.text
-//                    vc.tempItemImage = itemImage
-//                    vc.tempItemQRCodeNSData = itemQrCodeNSData
-//                    vc.tempFolderName = folderName
+                    //                    vc.tempItemTitle = titleTextField.text
+                    //                    vc.tempExistingItem = existingItem
+                    //                    vc.tempNewItem = newItem
+                    //                    vc.itemSubtitle = subtitleTextField.text
+                    //                    vc.tempItemNotes = notesTextView.text
+                    //                    vc.tempItemImage = itemImage
+                    //                    vc.tempItemQRCodeNSData = itemQrCodeNSData
+                    //                    vc.tempFolderName = folderName
                     
                 }
                 //preserve values to repopulate after folder is chosen

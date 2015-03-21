@@ -14,6 +14,16 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     @IBOutlet var tableView: UITableView!
     var folders = [AnyObject]()
     
+    //Values to preserve itemPageView attributes
+//    var tempItemTitle: String?
+//    var tempExistingItem: ItemCoreDataModel?
+//    var tempNewItem: ItemCoreDataModel?
+//    var tempItemSubtitle: ItemCoreDataModel?
+//    var tempItemNotes: String?
+//    var tempItemImage: UIImage?
+//    var tempItemQRCodeNSData: NSData?
+//    var tempFolderName: String?
+    
     override func viewDidLoad() {
         //super.viewDidLoad()
         
@@ -140,6 +150,7 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        println("about to segue with identifier \(segue.identifier)")
         if let identifier = segue.identifier {
             switch identifier {
             case "FolderCreation":
@@ -148,6 +159,7 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
                         ppc.delegate = self
                     }
                 }
+                
             default: break
             }
         }

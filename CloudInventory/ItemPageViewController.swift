@@ -1,6 +1,22 @@
 import UIKit
 import CoreData
 
+protocol ItemPageDataSource: class {
+    //qr code, itemImage, primaryColor, complementaryColor, existingItem, itemTitle, itemSubtitle, itemNotes, itemPhoto (nsdata), itemQRCodeNSData, folderName, newItem
+//    func qrCodeForItemPage(sender: ItemPageViewController) -> UIImage?
+//    func itemImageForItemPage(sender: ItemPageViewController) -> UIImage?
+//    func primaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
+//    func complementaryColorForItemPage(sender: ItemPageViewController) -> UIColor?
+//    func existingItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
+//    func itemTitleForItemPage(sender: ItemPageViewController) -> String?
+//    func itemSubtitleForItemPage(sender: ItemPageViewController) -> String?
+//    func itemNotesForItemPage(sender: ItemPageViewController) -> String?
+//    func itemPhotoForItemPage(sender: ItemPageViewController) -> NSData?
+//    func itemQRCodeNSDataForItemPage(sender: ItemPageViewController) -> NSData?
+    func folderNameForItemPage(sender: ItemPageViewController) -> String?
+//    func newItemForItemPage(sender: ItemPageViewController) -> ItemCoreDataModel?
+}
+
 class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var textViewToolbar: UIToolbar!
@@ -14,6 +30,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var actionButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
+    
+    weak var dataSource: ItemPageDataSource?
     var qrCode: UIImage? {
         didSet {
             qrCodeImageView.image = qrCode
@@ -57,17 +75,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     var itemNotes: String?
     var itemPhoto: NSData?
     var itemQrCodeNSData: NSData?
-    
-    var selectedItemNumber = 9
-    
-    var folderName: String? {
-        didSet {
-            println("folderName = \(folderName)")
-            println(itemTitle)
-            println("selectedItemNumber = \(selectedItemNumber)")
-            //saveAll()
-        }
-    }
+    var folderName: String?//
     
     //All properties for creating a new item
     var newItem: ItemCoreDataModel?
@@ -75,6 +83,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     
     override func viewWillAppear(animated: Bool) {
         println("viewWillAppear is called here...")
+        
     }
     
     override func viewDidLoad() {
@@ -92,6 +101,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             println("folderName retrieved from core data is \(existingItem!.folder)")
             displayItemInfo()
             saveButton.title = "Done"
+            
         }
         textViewToolbar.removeFromSuperview()
         titleTextField.delegate = self
@@ -326,7 +336,19 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
+//                    vc.tempItemTitle = titleTextField.text
+//                    vc.tempExistingItem = existingItem
+//                    vc.tempNewItem = newItem
+//                    vc.itemSubtitle = subtitleTextField.text
+//                    vc.tempItemNotes = notesTextView.text
+//                    vc.tempItemImage = itemImage
+//                    vc.tempItemQRCodeNSData = itemQrCodeNSData
+//                    vc.tempFolderName = folderName
+                    
                 }
+                //preserve values to repopulate after folder is chosen
+                //existingItem, newItem, itemTitle, itemSubtitle, itemNotes, itemPhoto, itemQRCodeNSData, folderName all need to be preserved
+                
             default: break
             }
         }

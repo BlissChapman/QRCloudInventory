@@ -114,20 +114,19 @@ class AllItemsTableViewController: UITableViewController {
         println("there are \(arrayToDisplay.count) items to display")
     }
     
-    func reloadDataForFolder() {
-        
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNew" {
-            
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
+            myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "update" {
             println(self.tableView.indexPathForSelectedRow()!.row)
             var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row - myFolders.count] as! ItemCoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
             myItemPageViewController.existingItem = selectedItem
+            myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "toScanner" {
-        
+            let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController
+            myScannerViewController.hidesBottomBarWhenPushed = true
         }
     }
 }

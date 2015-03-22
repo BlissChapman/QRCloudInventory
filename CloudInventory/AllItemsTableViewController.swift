@@ -25,6 +25,8 @@ class AllItemsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.clearsSelectionOnViewWillAppear = true
+        tableView.separatorColor = UIColor.blackColor()
+        tableView.separatorInset = UIEdgeInsetsZero
         
         var idStringRetrieved = ""
         var myPredicate = NSPredicate(format: "idString = %@", idStringRetrieved)
@@ -87,6 +89,15 @@ class AllItemsTableViewController: UITableViewController {
                 abort()
             }
         }
+    }
+    
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            return UIScreen.mainScreen().bounds.size.height / 5.0
+        }
+        return UIScreen.mainScreen().bounds.size.height / 9.4
     }
     
     //Table View Refreshing

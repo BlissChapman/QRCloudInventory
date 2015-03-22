@@ -190,12 +190,24 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func saveAll() {
+        println("save was tapped and titleTextField.text = \(titleTextField.text)")
+        if titleTextField.text == nil || titleTextField.text == "" {
+            println("title text field is nil")
+            var noTitleAlert = UIAlertController(title: "Title is required", message: "Please add a title to your item.", preferredStyle: .Alert)
+            noTitleAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(noTitleAlert, animated: true, completion: nil)
+            return
+        }
+        
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")
         
         var qrCodeImageToSave: NSData?
+        
         
         if existingItem != nil { //updating existing item
             existingItem?.title = titleTextField.text

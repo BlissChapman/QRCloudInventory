@@ -219,17 +219,18 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Ixz-Kd-fLc"/>
                                 </constraints>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Subtitle" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3Xh-QN-Q34">
                                 <rect key="frame" x="0.0" y="114" width="414" height="50"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="DHu-sV-EDO">
                                 <rect key="frame" x="0.0" y="204" width="414" height="532"/>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="4ZN-2t-XwW"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="5kt-Ni-W5Q"/>
@@ -238,6 +239,7 @@
                                     <constraint firstAttribute="width" constant="150" id="agj-6G-0nj"/>
                                     <constraint firstAttribute="width" constant="200" id="mCu-PK-rax"/>
                                 </constraints>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES"/>
                                 <variation key="default">
@@ -438,13 +440,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1086" y="-706"/>
+            <point key="canvasLocation" x="1179" y="-643"/>
         </scene>
         <!--Folder Selection Table View Controller-->
         <scene sceneID="yUq-mn-b8v">
             <objects>
                 <tableViewController id="2L1-m0-HVQ" customClass="FolderSelectionTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bDP-2u-tvi">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="bDP-2u-tvi">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -464,7 +466,7 @@
                             </items>
                         </toolbar>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="Cell" textLabel="yKI-Mm-aoI" imageView="lyN-km-Vug" style="IBUITableViewCellStyleDefault" id="574-hx-EUb">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="Cell" textLabel="yKI-Mm-aoI" imageView="lyN-km-Vug" rowHeight="50" style="IBUITableViewCellStyleDefault" id="574-hx-EUb">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="574-hx-EUb" id="eJF-rw-ycM">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -548,11 +550,11 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qL-Zp-72r">
                                 <rect key="frame" x="40" y="0.0" width="40" height="40"/>
-                                <state key="normal" image="ic_format_align_center_black_48dp.png">
+                                <state key="normal" title="AlignCenter" image="ic_format_align_center_black_48dp.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="alignCenterTapped:" destination="i58-Xr-Cah" eventType="touchUpInside" id="LPD-aF-KcX"/>
+                                    <action selector="optionSelected:" destination="i58-Xr-Cah" eventType="touchUpInside" id="2iF-U9-r29"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtV-Aj-V7o">
@@ -561,20 +563,20 @@
                                     <constraint firstAttribute="width" constant="40" id="Mru-6j-tyH"/>
                                     <constraint firstAttribute="height" constant="40" id="ykK-Sc-HQ9"/>
                                 </constraints>
-                                <state key="normal" image="ic_format_align_left_black_48dp.png">
+                                <state key="normal" title="AlignLeft" image="ic_format_align_left_black_48dp.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="alignLeftTapped:" destination="i58-Xr-Cah" eventType="touchUpInside" id="V6h-GG-qr7"/>
+                                    <action selector="optionSelected:" destination="i58-Xr-Cah" eventType="touchUpInside" id="61L-FA-yav"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZc-4a-FeG">
                                 <rect key="frame" x="80" y="0.0" width="40" height="40"/>
-                                <state key="normal" image="ic_format_align_right_black_48dp.png">
+                                <state key="normal" title="AlignRight" image="ic_format_align_right_black_48dp.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="alignRightTapped:" destination="i58-Xr-Cah" eventType="touchUpInside" id="TD5-jc-rnp"/>
+                                    <action selector="optionSelected:" destination="i58-Xr-Cah" eventType="touchUpInside" id="9XC-BR-GQL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -627,7 +629,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IZ4-hf-Fcj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1033" y="357"/>
+            <point key="canvasLocation" x="1029" y="398"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="iV6-ry-bGc">
@@ -635,7 +637,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="9G8-oF-mcl" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="mhM-5t-Ufv"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="2Hc-vE-XYu">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -653,12 +655,12 @@
         <scene sceneID="02K-PZ-8kr">
             <objects>
                 <tableViewController id="x8y-V2-h4w" customClass="TagsTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nsX-Pb-QIB">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="22" sectionFooterHeight="22" id="nsX-Pb-QIB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tagCell" textLabel="WyO-Qn-jdZ" imageView="zP5-MN-8bA" style="IBUITableViewCellStyleDefault" id="sfZ-Nt-r8Z">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="tagCell" textLabel="WyO-Qn-jdZ" imageView="zP5-MN-8bA" rowHeight="55" style="IBUITableViewCellStyleDefault" id="sfZ-Nt-r8Z">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sfZ-Nt-r8Z" id="04y-I7-Yjk">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -674,6 +676,9 @@
                                         </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="J08-aA-f4T" kind="show" identifier="filteredTaggedItems" id="g6M-jL-ThH"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -699,7 +704,35 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CUR-1d-jkj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1567" y="-30"/>
+            <point key="canvasLocation" x="396" y="773"/>
+        </scene>
+        <!--Filtered Tagged Items Table View Controller-->
+        <scene sceneID="h5M-Ah-L5l">
+            <objects>
+                <tableViewController id="J08-aA-f4T" customClass="FilteredTaggedItemsTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nhy-dk-AP0">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zIk-xz-saS">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zIk-xz-saS" id="KGi-0P-LI2">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="J08-aA-f4T" id="SKq-n7-cqS"/>
+                            <outlet property="delegate" destination="J08-aA-f4T" id="4TX-73-wQH"/>
+                        </connections>
+                    </tableView>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tcF-pW-tXX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1029" y="1171"/>
         </scene>
         <!--All-->
         <scene sceneID="Chu-ek-mwW">
@@ -761,8 +794,8 @@
         <image name="itemIcon.png" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CxS-UZ-9Co"/>
-        <segue reference="ZrG-RB-UgA"/>
-        <segue reference="5Q5-cq-AEF"/>
+        <segue reference="FTV-DH-bdu"/>
+        <segue reference="sLV-a0-KRX"/>
+        <segue reference="JSH-KW-mQY"/>
     </inferredMetricsTieBreakers>
 </document>

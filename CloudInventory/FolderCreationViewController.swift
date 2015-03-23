@@ -21,8 +21,7 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
 
         nameTextField.delegate = self
         self.preferredContentSize = CGSizeMake(nameTextField.frame.width, nameTextField.frame.height)
-        
-        // Do any additional setup after loading the view.
+
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -59,7 +58,6 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
         if err != nil {
             println("Error = \(err?.description)")
         }
-        println("FOLDERS: \(folders)")
     }
     
     /*

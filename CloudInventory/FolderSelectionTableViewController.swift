@@ -11,8 +11,34 @@ import CoreData
 
 class FolderSelectionTableViewController: ItemPageViewController, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate {
     
+//    @IBOutlet weak var folderSelectionView: UITableView! {
+//        didSet {
+//            println("folderSelectionView is now the dataSource for ItemPageViewController")
+//            folderSelectionView.dataSource = self
+//        }
+//    }
+    
+    //ItemPageDataSource protocol
+//    func indexOfCurrentItemInMyInventory(sender: ItemPageViewController) -> Int? {
+//        return folderSelectionIndexOfCurrentItemInMyInventoryArray
+//    }
+//    
+//    func folderNameForItemPage(sender: ItemPageViewController) -> String? {
+//        println("data source is going to return \(selectedFolderName)")
+//        return selectedFolderName
+//    }
+    
+    
+    
+    
     @IBOutlet var tableView: UITableView!
     var folders = [AnyObject]()
+    
+    var folderSelectionIndexOfCurrentItemInMyInventoryArray: Int = -1
+    var selectedFolderName = ""
+    
+    
+    
     
     //Values to preserve itemPageView attributes
 //    var tempItemTitle: String?
@@ -24,10 +50,12 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
 //    var tempItemQRCodeNSData: NSData?
 //    var tempFolderName: String?
     
+    override func viewWillAppear(animated: Bool) {
+        println("viewWillAppear: CURRENT INDEX IN FOLDER SELECTION: \(folderSelectionIndexOfCurrentItemInMyInventoryArray)")
+    }
     override func viewDidLoad() {
         //super.viewDidLoad()
         
-//        tableView.clearsSelectionOnViewWillAppear = true
         reloadInfo()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: "Folder Created", object: nil)
@@ -39,7 +67,6 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     }
     
     func reloadData() {
-        println("reload data called")
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let folderFrequency = NSFetchRequest(entityName: "Folder")
@@ -82,29 +109,12 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        folderName = ";lsadfja;ls"
+        folderName = folders[indexPath.row].name
         
         println("Name of the folder selected = \(folders[indexPath.row].name).  folderName now equals \(folderName)")
-        //saveFolderName(folders[indexPath.row].name)
+    println(NSUserDefaults.standardUserDefaults().valueForKey("lastFolderNameSelected") as? String)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-//    func saveFolderName(folderName: String) {
-//        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//        let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
-//        let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
-//        let frequency = NSFetchRequest(entityName: "InventoryItem")
-//        
-//        if existingItem != nil { //updating existing item
-//            println("The folder name to be saved: \(folderName)")
-//            existingItem?.folder = folderName
-//            println("The folder name that was saved: \(folderName)")
-//        } else if existingItem == nil { //creating new item
-//            newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
-//            newItem?.folder = folderName
-//        }
-//        myContext.save(nil)
-//    }
     
     /*
     // Override to support conditional editing of the table view.
@@ -148,6 +158,9 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     override func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
+    
+    
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         println("about to segue with identifier \(segue.identifier)")

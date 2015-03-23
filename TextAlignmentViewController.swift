@@ -25,25 +25,23 @@ class TextAlignmentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("yay")
         // Do any additional setup after loading the view.
     }
 
-    @IBAction func alignLeftTapped(sender: AnyObject) {
+    @IBAction func optionSelected(sender: UIButton) {
         //notesTextView.text = "alignLeft was tapped"
+        switch sender.currentTitle! {
+        case "AlignLeft":
+            println("alignLeft!")
+        case "AlignCenter":
+            println("alignCenter!")
+        case "AlignRight":
+            println("alignRight!")
+        default:
+            println("nothing selected")
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    @IBAction func alignCenterTapped(sender: AnyObject) {
-        //notesTextView.text = "alignLeft was tapped"
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func alignRightTapped(sender: AnyObject) {
-        //notesTextView.text = "alignLeft was tapped"
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

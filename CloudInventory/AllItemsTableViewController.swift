@@ -132,14 +132,15 @@ class AllItemsTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNew" {
+            println("addNew was segue")
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "update" {
             println(self.tableView.indexPathForSelectedRow()!.row)
-            var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel// - myFolders.count] as! ItemCoreDataModel
+            //var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel// - myFolders.count] as! ItemCoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
             myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)// - myFolders.count)
-            myItemPageViewController.existingItem = selectedItem
+            //myItemPageViewController.existingItem = selectedItem
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "toScanner" {
             let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController

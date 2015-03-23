@@ -13,7 +13,6 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     
     var myFolders = [AnyObject]()
     
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,11 +133,23 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let vc = segue.destinationViewController as? FolderCreationViewController {
-            if let ppc = vc.popoverPresentationController {
-                ppc.delegate = self
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "FolderCreation":
+                if let vc = segue.destinationViewController as? FolderCreationViewController {
+                    if let ppc = vc.popoverPresentationController {
+                        ppc.delegate = self
+                    }
+                }
+            case "filteredTaggedItems":
+                if let vc = segue.destinationViewController as? FilteredTaggedItemsTableViewController {
+                    
+                }
+                
+            default: break
             }
         }
+        
     }
 
 

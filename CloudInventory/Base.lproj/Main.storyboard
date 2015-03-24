@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="9G8-oF-mcl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="9G8-oF-mcl">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7513.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -253,8 +253,7 @@
                                     </mask>
                                 </variation>
                             </textView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="uxd-nd-Ce6">
-                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="35"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="uxd-nd-Ce6">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="0jc-6L-0UT"/>
                                     <constraint firstAttribute="height" constant="40" id="TFT-K9-aGP"/>
@@ -715,7 +714,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zIk-xz-saS">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="customTaggedItemViewCell" id="zIk-xz-saS" customClass="CustomItemTableViewCell" customModule="CloudInventory" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zIk-xz-saS" id="KGi-0P-LI2">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -723,8 +722,8 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="J08-aA-f4T" id="SKq-n7-cqS"/>
-                            <outlet property="delegate" destination="J08-aA-f4T" id="4TX-73-wQH"/>
+                            <outlet property="dataSource" destination="J08-aA-f4T" id="eX4-SQ-khM"/>
+                            <outlet property="delegate" destination="J08-aA-f4T" id="Ks5-mU-qRH"/>
                         </connections>
                     </tableView>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
@@ -794,8 +793,8 @@
         <image name="itemIcon.png" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="FTV-DH-bdu"/>
+        <segue reference="CxS-UZ-9Co"/>
+        <segue reference="ZrG-RB-UgA"/>
         <segue reference="sLV-a0-KRX"/>
-        <segue reference="JSH-KW-mQY"/>
     </inferredMetricsTieBreakers>
 </document>

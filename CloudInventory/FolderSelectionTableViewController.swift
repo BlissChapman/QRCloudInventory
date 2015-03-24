@@ -67,7 +67,7 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     }
     
     func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let folderFrequency = NSFetchRequest(entityName: "Folder")
         
@@ -96,7 +96,7 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as UITableViewCell
         
         if let folder = self.folders[indexPath.row] as? FolderCoreDataModel {
             cell.textLabel?.text = folder.name

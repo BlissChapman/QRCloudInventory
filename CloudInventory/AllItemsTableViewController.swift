@@ -40,12 +40,13 @@ class AllItemsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //println("there should be \(self.itemsWithNoFolders.count + self.myFolders.count) items")
         //return self.itemsWithNoFolders.count + self.myFolders.count
+        println("new row")
         return myInventory.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as! CustomItemTableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
         
         let itemToDisplay: AnyObject = self.myInventory[indexPath.row]
         //        if itemToDisplay is FolderCoreDataModel {
@@ -56,7 +57,7 @@ class AllItemsTableViewController: UITableViewController {
         if itemToDisplay is ItemCoreDataModel {
             //println("NOT A FOLDER :D")
             //println("@indexPath \(indexPath.row)")
-            let item = itemToDisplay as! ItemCoreDataModel
+            let item = itemToDisplay as ItemCoreDataModel
             cell.cellTitle.text = itemToDisplay.title
             cell.backgroundImage.image = UIImage(data: item.photoOfItem)
 //            cell.textLabel?.text = itemToDisplay.title
@@ -75,11 +76,11 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(myInventory[indexPath.row] as! NSManagedObject)
+            context.deleteObject(myInventory[indexPath.row] as NSManagedObject)
             
             myInventory.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
@@ -95,7 +96,7 @@ class AllItemsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            return UIScreen.mainScreen().bounds.size.height / 5.0
+            return UIScreen.mainScreen().bounds.size.height / 7.0
         }
         return UIScreen.mainScreen().bounds.size.height / 9.4
     }
@@ -108,7 +109,7 @@ class AllItemsTableViewController: UITableViewController {
     }
     
     func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
         let folderFrequency = NSFetchRequest(entityName: "Folder")
@@ -133,17 +134,17 @@ class AllItemsTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNew" {
             println("addNew was segue")
-            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "update" {
             println(self.tableView.indexPathForSelectedRow()!.row)
             //var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel// - myFolders.count] as! ItemCoreDataModel
-            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
             myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)// - myFolders.count)
             //myItemPageViewController.existingItem = selectedItem
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "toScanner" {
-            let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController
+            let myScannerViewController: ScannerViewController = segue.destinationViewController as ScannerViewController
             myScannerViewController.hidesBottomBarWhenPushed = true
         }
     }

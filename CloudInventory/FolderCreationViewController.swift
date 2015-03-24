@@ -21,19 +21,31 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
 
         nameTextField.delegate = self
         self.preferredContentSize = CGSizeMake(nameTextField.frame.width, nameTextField.frame.height)
-
+        checkData()
+        nameTextField.becomeFirstResponder()
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if let folderName = nameTextField.text {
+            for index in 0...(folders.count - 1) {
+                if folders[index].name == folderName {
+                    var duplicateTagAlert = UIAlertController(title: "Duplicate Tag", message: "This tag already exists.", preferredStyle: .Alert)
+                    duplicateTagAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }))
+                    self.presentViewController(duplicateTagAlert, animated: true, completion: nil)
+                    return true
+                }
+            }
             createFolder(folderName)
+            
         }
         return true
     }
 
     func createFolder(name: String) {
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("Folder", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "Folder")
@@ -49,7 +61,7 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let folderFrequency = NSFetchRequest(entityName: "Folder")
         

@@ -89,7 +89,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func setAllPropertiesFromIndex(index: Int) {
         var myInventory = [AnyObject]()
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
         var err: NSError?
@@ -134,7 +134,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBAction func trashTapped(sender: UIBarButtonItem) {
         var actionSheet = UIAlertController(title: "Trash", message: "Are you sure you want to delete this item?", preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { action in
-            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
             let context: NSManagedObjectContext = appDelegate.managedObjectContext!
     
             if self.existingItem != nil {
@@ -197,7 +197,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             return
         }
         
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")

@@ -15,18 +15,19 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
     lazy var helper = Helper()
     var filteredResults: [AnyObject]?
     
-    var testArray = ["HI", "table views are funky", "core data is for losers"]
+    //var testArray = ["HI", "table views are funky", "core data is for losers"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.clearsSelectionOnViewWillAppear = false
         
-//        if let tag = tagToSearch {
-//            filteredResults = helper.searchDatabaseForItemsWithTag(tag)!
-//            println("# of results = \(filteredResults?.count)")
-//            println(filteredResults)
-//            //println("the first item's title is \((self.filteredResults![0] as? ItemCoreDataModel).title)")
-//        }
+        self.clearsSelectionOnViewWillAppear = true
+        tableView.separatorColor = UIColor.blackColor()
+        tableView.separatorInset = UIEdgeInsetsZero
+        
+        if let tag = tagToSearch {
+            filteredResults = helper.searchDatabaseForItemsWithTag(tag)!
+            println("# of results = \(filteredResults?.count)")
+        }
     }
 
     // MARK: - Table view data source
@@ -36,29 +37,32 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         println(filteredResults?.count)
-        return testArray.count// ?? 0
+        return filteredResults?.count ?? 0
     }
 
-    
+/*var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
+if itemToDisplay is ItemCoreDataModel {
+let item = itemToDisplay as ItemCoreDataModel
+cell.cellTitle.text = itemToDisplay.title
+cell.backgroundImage.image = UIImage(data: item.photoOfItem)
+*/
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var customCell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customTaggedItemViewCell") as CustomItemTableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customTaggedItemViewCell") as CustomItemTableViewCell!
         
-        var title: String = testArray[indexPath.row]
-        println("title should be: \(title)")
-        customCell.cellTitle.text = title
-        customCell.backgroundImage.image = UIImage()
-//        let itemToDisplay: AnyObject = self.filteredResults![indexPath.row]
-//        println("itemToDisplay = \(itemToDisplay)")
-//        
-//        println(filteredResults![indexPath.row] as? ItemCoreDataModel)
-//        if let itemToDisplay = self.filteredResults?[indexPath.row] as? ItemCoreDataModel {
-//            println("should be ok")
-//            //cell.cellTitle.text = itemToDisplay.title
-//            //cell.backgroundImage.image = UIImage(data: item.photoOfItem)
-//        }
-        println("returning a cell")
-        return customCell
+//        var title: String = testArray[indexPath.row]
+//        println("title should be: \(title)")
+//        customCell.cellTitle.text = title
+//        customCell.backgroundImage.image = UIImage()
+        
+        if let itemToDisplay = self.filteredResults?[indexPath.row] as? ItemCoreDataModel {
+            println("should be ok")
+            cell.cellTitle.text = itemToDisplay.title
+            cell.backgroundImage.image = UIImage(data: itemToDisplay.photoOfItem)
+        }
+    
+        return cell
     }
     
 
@@ -109,14 +113,20 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+        
+
+        if segue.identifier == "updateFromFiltered" {
+            var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as ItemCoreDataModel
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
+            myItemPageViewController.existingItem = selectedItem
+            myItemPageViewController.hidesBottomBarWhenPushed = true
+        }
     }
-    */
+    
 
 }

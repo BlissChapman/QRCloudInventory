@@ -709,16 +709,68 @@
         <scene sceneID="h5M-Ah-L5l">
             <objects>
                 <tableViewController id="J08-aA-f4T" customClass="FilteredTaggedItemsTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nhy-dk-AP0">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" id="nhy-dk-AP0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="customTaggedItemViewCell" id="zIk-xz-saS" customClass="CustomItemTableViewCell" customModule="CloudInventory" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="customTaggedItemViewCell" rowHeight="100" id="zIk-xz-saS" customClass="CustomItemTableViewCell" customModule="CloudInventory" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zIk-xz-saS" id="KGi-0P-LI2">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p5k-BJ-dOp">
+                                            <rect key="frame" x="0.0" y="8" width="320" height="82"/>
+                                        </imageView>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nbu-o9-Bon">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="X1U-cT-muH">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </view>
+                                            <vibrancyEffect>
+                                                <blurEffect style="light"/>
+                                            </vibrancyEffect>
+                                        </visualEffectView>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BGe-NJ-EtN">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="uuT-rC-IS1">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </view>
+                                            <blurEffect style="dark"/>
+                                        </visualEffectView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mgw-46-QLi">
+                                            <rect key="frame" x="8" y="8" width="304" height="83"/>
+                                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="18"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="BGe-NJ-EtN" firstAttribute="leading" secondItem="KGi-0P-LI2" secondAttribute="leading" id="1WT-mS-Lfh"/>
+                                        <constraint firstItem="p5k-BJ-dOp" firstAttribute="top" secondItem="KGi-0P-LI2" secondAttribute="topMargin" id="6UP-gV-Jgd"/>
+                                        <constraint firstAttribute="bottom" secondItem="nbu-o9-Bon" secondAttribute="bottom" id="76G-jm-CMY"/>
+                                        <constraint firstAttribute="trailing" secondItem="BGe-NJ-EtN" secondAttribute="trailing" id="9oJ-hm-3Ii"/>
+                                        <constraint firstAttribute="bottom" secondItem="BGe-NJ-EtN" secondAttribute="bottom" id="Ivy-G8-B36"/>
+                                        <constraint firstItem="nbu-o9-Bon" firstAttribute="leading" secondItem="KGi-0P-LI2" secondAttribute="leading" id="Lzz-kU-nxW"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Mgw-46-QLi" secondAttribute="trailing" id="Wki-P0-K4S"/>
+                                        <constraint firstItem="BGe-NJ-EtN" firstAttribute="top" secondItem="KGi-0P-LI2" secondAttribute="top" id="dKM-Mq-mZL"/>
+                                        <constraint firstAttribute="trailing" secondItem="nbu-o9-Bon" secondAttribute="trailing" id="fg9-aE-p9o"/>
+                                        <constraint firstItem="p5k-BJ-dOp" firstAttribute="centerX" secondItem="Mgw-46-QLi" secondAttribute="centerX" id="iyU-Jh-lBm"/>
+                                        <constraint firstItem="Mgw-46-QLi" firstAttribute="leading" secondItem="KGi-0P-LI2" secondAttribute="leadingMargin" id="nhy-5Y-rLs"/>
+                                        <constraint firstItem="p5k-BJ-dOp" firstAttribute="centerY" secondItem="Mgw-46-QLi" secondAttribute="centerY" id="rjC-bH-6KN"/>
+                                        <constraint firstItem="nbu-o9-Bon" firstAttribute="top" secondItem="KGi-0P-LI2" secondAttribute="top" id="tzf-Xm-LMK"/>
+                                        <constraint firstItem="p5k-BJ-dOp" firstAttribute="leading" secondItem="KGi-0P-LI2" secondAttribute="leading" id="uBJ-EC-6Kp"/>
+                                        <constraint firstItem="Mgw-46-QLi" firstAttribute="top" secondItem="KGi-0P-LI2" secondAttribute="topMargin" id="xk6-ID-JK1"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Mgw-46-QLi" secondAttribute="bottom" id="yvY-67-0oZ"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="backgroundImage" destination="p5k-BJ-dOp" id="spu-1O-dPb"/>
+                                    <outlet property="cellTitle" destination="Mgw-46-QLi" id="SkD-8r-hSV"/>
+                                    <segue destination="vXZ-lx-hvc" kind="show" identifier="updateFromFiltered" id="J96-Y2-6DD"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -731,7 +783,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tcF-pW-tXX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1029" y="1171"/>
+            <point key="canvasLocation" x="1029" y="1167"/>
         </scene>
         <!--All-->
         <scene sceneID="Chu-ek-mwW">
@@ -793,8 +845,8 @@
         <image name="itemIcon.png" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CxS-UZ-9Co"/>
         <segue reference="ZrG-RB-UgA"/>
+        <segue reference="CxS-UZ-9Co"/>
         <segue reference="sLV-a0-KRX"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -28,6 +28,10 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if let folderName = nameTextField.text {
+            if folders.count == 0 {
+                createFolder(folderName)
+                return true
+            }
             for index in 0...(folders.count - 1) {
                 if folders[index].name == folderName {
                     var duplicateTagAlert = UIAlertController(title: "Duplicate Tag", message: "This tag already exists.", preferredStyle: .Alert)

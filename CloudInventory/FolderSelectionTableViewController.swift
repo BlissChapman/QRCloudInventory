@@ -34,7 +34,15 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
     @IBOutlet var tableView: UITableView!
     var folders = [AnyObject]()
     
-    var folderSelectionIndexOfCurrentItemInMyInventoryArray: Int = -1
+//    var folderSelectionIndexOfCurrentItemInMyInventoryArray: Int? {
+//        get {
+//            return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
+//        }
+//        set {
+//            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "indexOfCurrentItemInMyInventoryArray")
+//            NSUserDefaults.standardUserDefaults().synchronize()
+//        }
+//    }
     var selectedFolderName = ""
     
     
@@ -51,7 +59,7 @@ class FolderSelectionTableViewController: ItemPageViewController, UITableViewDel
 //    var tempFolderName: String?
     
     override func viewWillAppear(animated: Bool) {
-        println("viewWillAppear: CURRENT INDEX IN FOLDER SELECTION: \(folderSelectionIndexOfCurrentItemInMyInventoryArray)")
+        
     }
     override func viewDidLoad() {
         //super.viewDidLoad()

@@ -76,13 +76,23 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
 
         if indexOfCurrentItemInMyInventoryArray != nil {
             setAllPropertiesFromIndex(indexOfCurrentItemInMyInventoryArray!)
+        } else if existingItem != nil {
+            itemTitle = existingItem?.title
+            itemSubtitle = existingItem?.subtitle
+            itemNotes = existingItem?.notes
+            itemNotes = existingItem!.notes
+            itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
+            itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
+            folderName = existingItem!.folder
         }
         if existingItem != nil {
             displayItemInfo()
             saveButton.title = "Done"
         }
+        
         textViewToolbar.removeFromSuperview()
         titleTextField.delegate = self
+        titleTextField.becomeFirstResponder()
         subtitleTextField.delegate = self
         notesTextView.inputAccessoryView = textViewToolbar
     }
@@ -105,7 +115,6 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
             folderName = existingItem!.folder
-            println("the folderName retrieved from core data is: \(folderName)")
         }
     }
     
@@ -381,9 +390,9 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                         ppc.delegate = self
                     }
             
-                    if let currentIndex = indexOfCurrentItemInMyInventoryArray {
-                        vc.folderSelectionIndexOfCurrentItemInMyInventoryArray = currentIndex
-                    }
+//                    if let currentIndex = indexOfCurrentItemInMyInventoryArray {
+//                        vc.folderSelectionIndexOfCurrentItemInMyInventoryArray = currentIndex
+//                    }
                     
                     //                    vc.tempItemTitle = titleTextField.text
                     //                    vc.tempExistingItem = existingItem

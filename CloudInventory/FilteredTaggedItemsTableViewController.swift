@@ -59,7 +59,9 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
         if let itemToDisplay = self.filteredResults?[indexPath.row] as? ItemCoreDataModel {
             println("should be ok")
             cell.cellTitle.text = itemToDisplay.title
-            cell.backgroundImage.image = UIImage(data: itemToDisplay.photoOfItem)
+            if itemToDisplay.photoOfItem != nil {
+                cell.backgroundImage.image = UIImage(data: itemToDisplay.photoOfItem!)
+            }
         }
     
         return cell

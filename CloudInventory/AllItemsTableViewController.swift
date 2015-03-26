@@ -59,7 +59,9 @@ class AllItemsTableViewController: UITableViewController {
             //println("@indexPath \(indexPath.row)")
             let item = itemToDisplay as ItemCoreDataModel
             cell.cellTitle.text = itemToDisplay.title
-            cell.backgroundImage.image = UIImage(data: item.photoOfItem)
+            if item.photoOfItem != nil {
+                cell.backgroundImage.image = UIImage(data: item.photoOfItem!)
+            }
 //            cell.textLabel?.text = itemToDisplay.title
 //            cell.detailTextLabel?.text = item.subtitle
 //            cell.imageView?.image = UIImage(data: item.photoOfItem)

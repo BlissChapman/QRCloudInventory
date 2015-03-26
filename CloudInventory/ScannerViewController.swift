@@ -106,18 +106,19 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
                 self.newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
                 self.newItem?.title = self.encodedStringValue!
-                //self.newItem?.subtitle = ""
-                //self.newItem?.notes = ""
+                self.newItem?.subtitle = nil
+                self.newItem?.notes = nil
+                self.newItem?.photoOfItem = nil
                 self.newItem?.dateLastEdited = NSDate()
                 self.newItem?.dateCreated = NSDate()
                 self.newItem?.folder = nil
-                //self.newItem.photoOfItem = nil
+                
                 
                 //SHOULD CHECK IF ID STRING WITH THIS VALUE EXISTS - ns predicate
                 self.newItem?.idString = self.encodedStringValue!
                 
                 //recreates qr code from extracted string then converts to nsdata - CHECK TO MAKE SURE IT WORKS
-                self.newItem!.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString(self.encodedStringValue!), jpeg: true)
+                self.newItem?.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString(self.encodedStringValue!), jpeg: true)
     
                 myContext.save(nil)
                 self.performSegueWithIdentifier("toTableView", sender: self)

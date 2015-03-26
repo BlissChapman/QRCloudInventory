@@ -11,9 +11,9 @@ import CoreData
 
 class ItemCoreDataModel: NSManagedObject {
     @NSManaged var title: String
-    @NSManaged var subtitle: String
-    @NSManaged var notes: String
-    @NSManaged var photoOfItem: NSData
+    @NSManaged var subtitle: String?
+    @NSManaged var notes: String?
+    @NSManaged var photoOfItem: NSData?
     @NSManaged var qrCodeImage: NSData
     @NSManaged var idString: String
     @NSManaged var dateCreated: NSDate

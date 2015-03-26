@@ -20,8 +20,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
     
-//    weak var dataSource: ItemPageDataSource?
-    
+    //    weak var dataSource: ItemPageDataSource?
+    var selectTitleAutomatically = true
     var qrCode: UIImage? {
         didSet {
             qrCodeImageView.image = qrCode
@@ -55,7 +55,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     var indexOfCurrentItemInMyInventoryArray: Int? {
         get {
-             return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
+            return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
         }
         set {
             NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "indexOfCurrentItemInMyInventoryArray")
@@ -66,21 +66,15 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     var newItem: ItemCoreDataModel?
     
     
-    override func viewWillAppear(animated: Bool) {
-        println("viewWillAppear is called here...")
-        println("CURRENT INDEX IS: \(indexOfCurrentItemInMyInventoryArray)")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        println("CURRENT INDEX IS: \(indexOfCurrentItemInMyInventoryArray)")
         if indexOfCurrentItemInMyInventoryArray != nil {
             setAllPropertiesFromIndex(indexOfCurrentItemInMyInventoryArray!)
         } else if existingItem != nil {
             itemTitle = existingItem?.title
             itemSubtitle = existingItem?.subtitle
             itemNotes = existingItem?.notes
-            itemNotes = existingItem!.notes
             itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
             folderName = existingItem!.folder
@@ -92,7 +86,9 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         
         textViewToolbar.removeFromSuperview()
         titleTextField.delegate = self
-        titleTextField.becomeFirstResponder()
+        if selectTitleAutomatically == true {
+            titleTextField.becomeFirstResponder()
+        }
         subtitleTextField.delegate = self
         notesTextView.inputAccessoryView = textViewToolbar
     }
@@ -108,13 +104,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         existingItem = myInventory[index] as? ItemCoreDataModel
         
         if existingItem != nil {
+            println(existingItem?.title)
             itemTitle = existingItem?.title
             itemSubtitle = existingItem?.subtitle
             itemNotes = existingItem?.notes
-            itemNotes = existingItem!.notes
-            itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
-            itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
-            folderName = existingItem!.folder
+            itemPhoto = existingItem?.valueForKey("photoOfItem") as? NSData
+            itemQrCodeNSData = existingItem?.valueForKey("qrCodeImage") as? NSData
+            folderName = existingItem?.folder
         }
     }
     
@@ -145,7 +141,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         actionSheet.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { action in
             let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
             let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-    
+            
             if self.existingItem != nil {
                 context.deleteObject(self.existingItem!)
             } else if self.newItem != nil {
@@ -223,7 +219,6 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             }
             existingItem?.dateLastEdited = NSDate()
             existingItem?.folder = folderName
-            println("The folder name that was saved: \(folderName)")
         } else if existingItem == nil { //creating new item
             newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
             newItem?.title = titleTextField.text
@@ -232,7 +227,6 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             newItem?.dateLastEdited = NSDate()
             newItem?.dateCreated = NSDate()
             newItem?.folder = folderName
-            println("The folder name that was saved: \(folderName)")
             if let pngImage = UIImageJPEGRepresentation(itemImage, 1.0) {
                 newItem?.photoOfItem = pngImage
             }
@@ -389,10 +383,10 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
-            
-//                    if let currentIndex = indexOfCurrentItemInMyInventoryArray {
-//                        vc.folderSelectionIndexOfCurrentItemInMyInventoryArray = currentIndex
-//                    }
+                    
+                    //                    if let currentIndex = indexOfCurrentItemInMyInventoryArray {
+                    //                        vc.folderSelectionIndexOfCurrentItemInMyInventoryArray = currentIndex
+                    //                    }
                     
                     //                    vc.tempItemTitle = titleTextField.text
                     //                    vc.tempExistingItem = existingItem

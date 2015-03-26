@@ -40,7 +40,7 @@ class AllItemsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //println("there should be \(self.itemsWithNoFolders.count + self.myFolders.count) items")
         //return self.itemsWithNoFolders.count + self.myFolders.count
-        println("new row")
+        println("table view refreshed")
         return myInventory.count
     }
     
@@ -140,8 +140,8 @@ class AllItemsTableViewController: UITableViewController {
             println(self.tableView.indexPathForSelectedRow()!.row)
             //var selectedItem: ItemCoreDataModel = myInventory[self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel// - myFolders.count] as! ItemCoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
-            myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)// - myFolders.count)
-            //myItemPageViewController.existingItem = selectedItem
+            myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)
+            myItemPageViewController.selectTitleAutomatically = false
             myItemPageViewController.hidesBottomBarWhenPushed = true
         } else if segue.identifier == "toScanner" {
             let myScannerViewController: ScannerViewController = segue.destinationViewController as ScannerViewController

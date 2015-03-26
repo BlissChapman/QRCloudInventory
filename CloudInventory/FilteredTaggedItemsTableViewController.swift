@@ -118,12 +118,11 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-
         if segue.identifier == "updateFromFiltered" {
             var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as ItemCoreDataModel
             let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
             myItemPageViewController.existingItem = selectedItem
+            myItemPageViewController.selectTitleAutomatically = false
             myItemPageViewController.hidesBottomBarWhenPushed = true
         }
     }

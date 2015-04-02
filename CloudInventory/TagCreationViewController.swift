@@ -1,5 +1,5 @@
 //
-//  FolderCreationViewController.swift
+//  TagCreationViewController.swift
 //  CloudInventory
 //
 //  Created by Bliss Chapman on 3/12/15.
@@ -9,12 +9,12 @@
 import UIKit
 import CoreData
 
-class FolderCreationViewController: UIViewController, UITextFieldDelegate {
+class TagCreationViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameTextField: UITextField!
     
-    var newFolder: FolderCoreDataModel?
-    var folders = [AnyObject]()
+    var newTag: TagCoreDataModel?
+    var tags = [AnyObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,13 +27,13 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        if let folderName = nameTextField.text {
-            if folders.count == 0 {
-                createFolder(folderName)
+        if let tagName = nameTextField.text {
+            if tags.count == 0 {
+                createTag(tagName)
                 return true
             }
-            for index in 0...(folders.count - 1) {
-                if folders[index].name == folderName {
+            for index in 0...(tags.count - 1) {
+                if tags[index].name == tagName {
                     var duplicateTagAlert = UIAlertController(title: "Duplicate Tag", message: "This tag already exists.", preferredStyle: .Alert)
                     duplicateTagAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
                         self.dismissViewControllerAnimated(true, completion: nil)
@@ -42,35 +42,36 @@ class FolderCreationViewController: UIViewController, UITextFieldDelegate {
                     return true
                 }
             }
-            createFolder(folderName)
+            createTag(tagName)
             
         }
         return true
     }
 
-    func createFolder(name: String) {
+    func createTag(name: String) {
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
-        let myEntity = NSEntityDescription.entityForName("Folder", inManagedObjectContext: myContext)
-        let frequency = NSFetchRequest(entityName: "Folder")
+        let myEntity = NSEntityDescription.entityForName("Tag", inManagedObjectContext: myContext)
+        let frequency = NSFetchRequest(entityName: "Tag")
         
-        newFolder = FolderCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
-        newFolder?.name = nameTextField.text
+        newTag = TagCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
+        newTag?.name = nameTextField.text
         
         myContext.save(nil)
-        checkData()
+        //checkData()
         
         self.dismissViewControllerAnimated(true, completion: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("Folder Created", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("Tag Created", object: nil)
+        println("posted notification")
     }
     
     func checkData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let folderFrequency = NSFetchRequest(entityName: "Folder")
+        let tagFrequency = NSFetchRequest(entityName: "Tag")
         
         var err: NSError?
-        folders = context.executeFetchRequest(folderFrequency, error: &err)!
+        tags = context.executeFetchRequest(tagFrequency, error: &err)!
         if err != nil {
             println("Error = \(err?.description)")
         }

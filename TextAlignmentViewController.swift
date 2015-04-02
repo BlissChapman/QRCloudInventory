@@ -33,6 +33,7 @@ class TextAlignmentViewController: UIViewController {
         switch sender.currentTitle! {
         case "AlignLeft":
             println("alignLeft!")
+            //UITextViewAlignment
         case "AlignCenter":
             println("alignCenter!")
         case "AlignRight":

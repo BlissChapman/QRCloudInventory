@@ -16,21 +16,39 @@ class Helper {
     
     init() {}
     
-    var audioPlayer = AVAudioPlayer()
-    var iOSVersion: NSString = UIDevice.currentDevice().systemVersion
-    
-    //QR CODES
-    func generateQRCodeForString(stringToBeEncoded: String) -> UIImage {
-        var stringData: NSData = stringToBeEncoded.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!
+    // MARK: - QR Codes
+    func generateQRCodeForString(title: String, subtitle: String, notes: String, fromString: String?) -> (qrCode: UIImage, encodedString: String) {
+        var stringToBeEncoded: String
+        if fromString != nil {
+            stringToBeEncoded = fromString!
+        } else {
+            stringToBeEncoded = generateIdString(title, subtitle: subtitle, notes: notes)
+        }
+        
+        let stringData: NSData = stringToBeEncoded.dataUsingEncoding(NSISOLatin1StringEncoding, allowLossyConversion: true)!
         var qrFilter: CIFilter = CIFilter(name: "CIQRCodeGenerator")
+        qrFilter.setDefaults()
         qrFilter.setValue(stringData, forKey: "inputMessage")
         qrFilter.setValue("M", forKey: "inputCorrectionLevel")
-        var qrCode = UIImage(CIImage: qrFilter.outputImage)
+    
+        let qrCode: UIImage? = self.createNonInterpolatedUIImageFromCIImage(qrFilter.outputImage, scale: 5.0)
         
-        return qrCode!
+        return (qrCode!, stringToBeEncoded)
     }
     
-    func generateIdString(title: String, subtitle: String, notes: String) -> String {
+    private func createNonInterpolatedUIImageFromCIImage(image: CIImage, scale: CGFloat) -> UIImage {
+        let cgImage: CGImageRef = CIContext(options: nil).createCGImage(image, fromRect: image.extent())
+        UIGraphicsBeginImageContext(CGSizeMake(image.extent().size.width * scale, image.extent().size.height * scale))
+        let context: CGContextRef = UIGraphicsGetCurrentContext()
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone)
+        CGContextDrawImage(context, CGContextGetClipBoundingBox(context), cgImage)
+        let scaledImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return UIImage(CGImage: scaledImage.CGImage, scale: scaledImage.scale, orientation: UIImageOrientation.DownMirrored)!
+    }
+    
+    private func generateIdString(title: String, subtitle: String, notes: String) -> String {
         var randomIdentifier: Int = Int(arc4random())
         var randomIdentifier2: Int = Int(arc4random())
         return String(randomIdentifier) + title + subtitle + notes + String(randomIdentifier2)
@@ -103,7 +121,7 @@ class Helper {
         let url = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("beep-07", ofType: "mp3")!)
         var error: NSError?
         if let beepSound = url {
-            audioPlayer = AVAudioPlayer(contentsOfURL: beepSound, error: &error)
+            let audioPlayer = AVAudioPlayer(contentsOfURL: beepSound, error: &error)
             audioPlayer.volume = 1.0
             audioPlayer.prepareToPlay()
             audioPlayer.play()
@@ -120,10 +138,15 @@ class Helper {
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")
         
-        var myPredicate = NSPredicate(format: "folder = %@", tag)
+        var myPredicate = NSPredicate(format: "tags = %@", tag)
         println(myPredicate)
         frequency.predicate = myPredicate
         
+        var error = NSErrorPointer()
+        myContext.executeFetchRequest(frequency, error: error)
+        if error != nil {
+            println(error.debugDescription)
+        }
         return myContext.executeFetchRequest(frequency, error: nil) ?? nil
     }
 }

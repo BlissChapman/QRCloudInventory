@@ -111,15 +111,15 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 self.newItem?.photoOfItem = nil
                 self.newItem?.dateLastEdited = NSDate()
                 self.newItem?.dateCreated = NSDate()
-                self.newItem?.folder = nil
+                self.newItem?.tags = nil
                 
                 
                 //SHOULD CHECK IF ID STRING WITH THIS VALUE EXISTS - ns predicate
                 self.newItem?.idString = self.encodedStringValue!
                 
-                //recreates qr code from extracted string then converts to nsdata - CHECK TO MAKE SURE IT WORKS
-                self.newItem?.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString(self.encodedStringValue!), jpeg: true)
-    
+                //recreates qr code from extracted string then converts to nsdata
+                self.newItem?.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString("", subtitle: "", notes: "", fromString: self.encodedStringValue!).qrCode, jpeg: true)
+        
                 myContext.save(nil)
                 self.performSegueWithIdentifier("toTableView", sender: self)
             }))
@@ -153,6 +153,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             if selectedItem != nil {
                 myItemViewController.existingItem = selectedItem
             }
+            myItemViewController.selectTitleAutomatically = false
 //            if newItem != nil {
 //                println("newItem information")
 //                myItemViewController.newItem = newItem

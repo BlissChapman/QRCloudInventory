@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="9G8-oF-mcl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="9G8-oF-mcl">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -10,11 +10,11 @@
             <objects>
                 <tableViewController id="D93-Ue-6xV" customClass="AllItemsTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="22" sectionFooterHeight="22" id="x5O-HS-v3Y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="sectionIndexBackgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="sectionIndexTrackingBackgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="customItemTableViewCell" rowHeight="59" id="DGw-f8-mcl" customClass="CustomItemTableViewCell" customModule="CloudInventory" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -157,23 +157,14 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="M21-q5-z2Z">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LiN-8G-H8J">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="89R-Aa-zUM">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </view>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <blurEffect style="dark"/>
-                            </visualEffectView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EUL-Dy-TnZ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Hs0-he-fJn">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="KML-3l-WlU">
-                                            <rect key="frame" x="0.0" y="164" width="414" height="40"/>
+                                        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="KML-3l-WlU">
+                                            <rect key="frame" x="0.0" y="120" width="414" height="40"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="gkz-5d-HEt"/>
                                             </constraints>
@@ -186,7 +177,7 @@
                                                 <barButtonItem style="plain" systemItem="flexibleSpace" id="2sq-8w-5Rv"/>
                                                 <barButtonItem image="TagIcon.png" style="plain" id="5n5-1l-p4E">
                                                     <connections>
-                                                        <segue destination="2L1-m0-HVQ" kind="popoverPresentation" identifier="FolderSelection" popoverAnchorBarButtonItem="5n5-1l-p4E" id="qpd-GD-sGl">
+                                                        <segue destination="2L1-m0-HVQ" kind="popoverPresentation" identifier="TagSelection" popoverAnchorBarButtonItem="5n5-1l-p4E" id="8g1-1V-DuG">
                                                             <popoverArrowDirection key="popoverArrowDirection" up="YES"/>
                                                         </segue>
                                                     </connections>
@@ -212,10 +203,10 @@
                                         <constraint firstItem="KML-3l-WlU" firstAttribute="leading" secondItem="Hs0-he-fJn" secondAttribute="leading" id="V0g-pO-AeT"/>
                                     </constraints>
                                 </view>
-                                <blurEffect style="light"/>
+                                <blurEffect style="extraLight"/>
                             </visualEffectView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Title" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RTT-KA-aza">
-                                <rect key="frame" x="0.0" y="64" width="414" height="50"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RTT-KA-aza">
+                                <rect key="frame" x="0.0" y="20" width="414" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Ixz-Kd-fLc"/>
                                 </constraints>
@@ -223,14 +214,14 @@
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Subtitle" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3Xh-QN-Q34">
-                                <rect key="frame" x="0.0" y="114" width="414" height="50"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Subtitle" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3Xh-QN-Q34">
+                                <rect key="frame" x="0.0" y="70" width="414" height="50"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="DHu-sV-EDO">
-                                <rect key="frame" x="0.0" y="204" width="414" height="532"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="DHu-sV-EDO">
+                                <rect key="frame" x="0.0" y="160" width="414" height="576"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="4ZN-2t-XwW"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="5kt-Ni-W5Q"/>
@@ -342,28 +333,21 @@
                             <constraint firstAttribute="bottom" secondItem="DHu-sV-EDO" secondAttribute="bottom" id="4Ei-me-eff"/>
                             <constraint firstItem="DHu-sV-EDO" firstAttribute="top" secondItem="KML-3l-WlU" secondAttribute="bottom" id="5d9-sn-4X4"/>
                             <constraint firstAttribute="trailing" secondItem="M21-q5-z2Z" secondAttribute="trailing" id="7Vy-od-lwd"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="width" secondItem="n4u-lz-J00" secondAttribute="width" id="AeP-Fp-m1n"/>
                             <constraint firstItem="uxd-nd-Ce6" firstAttribute="top" secondItem="DHu-sV-EDO" secondAttribute="bottom" id="BXx-Zi-8iw"/>
                             <constraint firstAttribute="bottom" secondItem="n4u-lz-J00" secondAttribute="bottom" id="ErJ-CK-FNp"/>
-                            <constraint firstAttribute="trailing" secondItem="LiN-8G-H8J" secondAttribute="trailing" id="GnP-Em-ubR"/>
                             <constraint firstItem="3Xh-QN-Q34" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="MDx-nb-np5"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="MLg-6d-Ha3"/>
                             <constraint firstItem="M21-q5-z2Z" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="N5i-LJ-T79"/>
                             <constraint firstAttribute="trailing" secondItem="gz5-Q9-Wgp" secondAttribute="trailing" id="Nds-OD-pCY"/>
                             <constraint firstAttribute="bottom" secondItem="uxd-nd-Ce6" secondAttribute="bottom" id="Nui-Lm-VYu"/>
                             <constraint firstItem="M21-q5-z2Z" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="ONy-Bb-eHX"/>
                             <constraint firstAttribute="trailing" secondItem="RTT-KA-aza" secondAttribute="trailing" id="Oh9-Lm-sKW"/>
                             <constraint firstItem="RTT-KA-aza" firstAttribute="height" secondItem="3Xh-QN-Q34" secondAttribute="height" id="V1n-WQ-3p2"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="centerX" secondItem="n4u-lz-J00" secondAttribute="centerX" id="VfP-sj-ZK9"/>
                             <constraint firstItem="KML-3l-WlU" firstAttribute="top" secondItem="3Xh-QN-Q34" secondAttribute="bottom" id="WC9-Nn-ZaQ"/>
                             <constraint firstItem="RTT-KA-aza" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="WqC-Q0-2Rh"/>
                             <constraint firstAttribute="trailing" secondItem="uxd-nd-Ce6" secondAttribute="trailing" id="XAA-x2-NSj"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="centerY" secondItem="n4u-lz-J00" secondAttribute="centerY" id="XRk-MC-PoZ"/>
                             <constraint firstItem="EUL-Dy-TnZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Xzd-wG-yco"/>
                             <constraint firstItem="DHu-sV-EDO" firstAttribute="top" secondItem="3Xh-QN-Q34" secondAttribute="bottom" id="Y89-if-EMh"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="ahx-Tn-za4"/>
                             <constraint firstAttribute="bottom" secondItem="M21-q5-z2Z" secondAttribute="bottom" id="bd1-vS-44g"/>
-                            <constraint firstItem="LiN-8G-H8J" firstAttribute="height" secondItem="n4u-lz-J00" secondAttribute="height" id="g2T-l6-wMn"/>
                             <constraint firstItem="uxd-nd-Ce6" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="gGC-q0-6Qb"/>
                             <constraint firstItem="uxd-nd-Ce6" firstAttribute="top" secondItem="n4u-lz-J00" secondAttribute="bottom" id="gfx-KF-a0V"/>
                             <constraint firstItem="gz5-Q9-Wgp" firstAttribute="top" secondItem="n4u-lz-J00" secondAttribute="bottom" id="hWY-JL-d6K"/>
@@ -371,7 +355,6 @@
                             <constraint firstItem="EUL-Dy-TnZ" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="id9-VU-WzJ"/>
                             <constraint firstAttribute="trailing" secondItem="n4u-lz-J00" secondAttribute="trailing" id="jYk-Oe-pnC"/>
                             <constraint firstItem="n4u-lz-J00" firstAttribute="height" secondItem="gz5-Q9-Wgp" secondAttribute="height" id="l5t-zd-OYP"/>
-                            <constraint firstAttribute="bottom" secondItem="LiN-8G-H8J" secondAttribute="bottom" id="lYn-h0-ASa"/>
                             <constraint firstAttribute="trailing" secondItem="3Xh-QN-Q34" secondAttribute="trailing" id="lny-oO-wiP"/>
                             <constraint firstAttribute="trailing" secondItem="EUL-Dy-TnZ" secondAttribute="trailing" id="lzI-Gi-p41"/>
                             <constraint firstAttribute="bottom" secondItem="gz5-Q9-Wgp" secondAttribute="bottom" id="moM-V8-vaW"/>
@@ -386,10 +369,6 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="AeP-Fp-m1n"/>
-                                <exclude reference="VfP-sj-ZK9"/>
-                                <exclude reference="XRk-MC-PoZ"/>
-                                <exclude reference="g2T-l6-wMn"/>
                                 <exclude reference="BXx-Zi-8iw"/>
                                 <exclude reference="Nui-Lm-VYu"/>
                                 <exclude reference="XAA-x2-NSj"/>
@@ -445,10 +424,10 @@
             </objects>
             <point key="canvasLocation" x="1179" y="-643"/>
         </scene>
-        <!--Folder Selection Table View Controller-->
+        <!--Tag Selection Table View Controller-->
         <scene sceneID="yUq-mn-b8v">
             <objects>
-                <tableViewController id="2L1-m0-HVQ" customClass="FolderSelectionTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="2L1-m0-HVQ" customClass="TagSelectionTableViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="bDP-2u-tvi">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -460,7 +439,7 @@
                                 <barButtonItem style="plain" systemItem="flexibleSpace" id="R7t-Sy-sB1"/>
                                 <barButtonItem systemItem="add" id="NsH-UM-fET">
                                     <connections>
-                                        <segue destination="271-Pr-Elv" kind="popoverPresentation" identifier="FolderCreation" popoverAnchorBarButtonItem="NsH-UM-fET" id="5Q5-cq-AEF">
+                                        <segue destination="271-Pr-Elv" kind="popoverPresentation" identifier="TagCreation" popoverAnchorBarButtonItem="NsH-UM-fET" id="5Q5-cq-AEF">
                                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                         </segue>
                                     </connections>
@@ -488,23 +467,23 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="2L1-m0-HVQ" id="z15-RE-Yca"/>
-                            <outlet property="delegate" destination="2L1-m0-HVQ" id="d89-X1-zHH"/>
+                            <outlet property="dataSource" destination="2L1-m0-HVQ" id="hxi-LO-9hk"/>
+                            <outlet property="delegate" destination="2L1-m0-HVQ" id="dIA-iX-xKN"/>
                         </connections>
                     </tableView>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="tableView" destination="bDP-2u-tvi" id="GHl-fl-Zzn"/>
+                        <outlet property="tableView" destination="bDP-2u-tvi" id="yuz-SJ-5G4"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PFb-kX-aKh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1665" y="-612"/>
         </scene>
-        <!--Folder Creation View Controller-->
+        <!--Tag Creation View Controller-->
         <scene sceneID="cMR-5r-ptB">
             <objects>
-                <viewController id="271-Pr-Elv" customClass="FolderCreationViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="271-Pr-Elv" customClass="TagCreationViewController" customModule="CloudInventory" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="esI-1s-qk0"/>
                         <viewControllerLayoutGuide type="bottom" id="Rmu-4R-ak0"/>
@@ -620,7 +599,7 @@
                         <viewControllerLayoutGuide type="bottom" id="JT1-Uw-nQs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="akU-tI-haw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -641,6 +620,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="mhM-5t-Ufv"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="2Hc-vE-XYu">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -697,7 +677,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="EHs-pQ-c64">
                             <connections>
-                                <segue destination="271-Pr-Elv" kind="popoverPresentation" identifier="FolderCreation" popoverAnchorBarButtonItem="EHs-pQ-c64" id="sLV-a0-KRX">
+                                <segue destination="271-Pr-Elv" kind="popoverPresentation" identifier="TagCreation" popoverAnchorBarButtonItem="EHs-pQ-c64" id="sLV-a0-KRX">
                                     <popoverArrowDirection key="popoverArrowDirection" up="YES"/>
                                 </segue>
                             </connections>
@@ -849,9 +829,9 @@
         <image name="itemIcon.png" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CxS-UZ-9Co"/>
+        <segue reference="FTV-DH-bdu"/>
+        <segue reference="sLV-a0-KRX"/>
         <segue reference="qAV-ax-7Bb"/>
         <segue reference="O9D-bw-yRf"/>
-        <segue reference="sLV-a0-KRX"/>
     </inferredMetricsTieBreakers>
 </document>

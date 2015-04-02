@@ -18,9 +18,9 @@ class ItemCoreDataModel: NSManagedObject {
     @NSManaged var idString: String
     @NSManaged var dateCreated: NSDate
     @NSManaged var dateLastEdited: NSDate
-    @NSManaged var folder: String?
+    @NSManaged var tags: String?
 }
 
-class FolderCoreDataModel: NSManagedObject {
+class TagCoreDataModel: NSManagedObject {
     @NSManaged var name: String
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5150E9D1AC48CE0003F4287 /* TagSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5150E9C1AC48CE0003F4287 /* TagSelectionTableViewController.swift */; };
 		A519AAD91AC0839400D45EF2 /* FilteredTaggedItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A519AAD81AC0839400D45EF2 /* FilteredTaggedItemsTableViewController.swift */; };
 		A51C45191ABD1E230020F0A8 /* CustomItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51C45181ABD1E230020F0A8 /* CustomItemTableViewCell.swift */; };
 		A52DBE8F1AAA840F007CEA3D /* Italics.png in Resources */ = {isa = PBXBuildFile; fileRef = A52DBE8E1AAA840F007CEA3D /* Italics.png */; };
@@ -37,8 +38,7 @@
 		A56B5FDB1A928B670062608C /* AllItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FDA1A928B670062608C /* AllItemsTableViewController.swift */; };
 		A56B5FDD1A928BBC0062608C /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FDC1A928BBC0062608C /* ScannerViewController.swift */; };
 		A56B5FE11A9294210062608C /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B5FE01A9294210062608C /* CoreDataModel.swift */; };
-		A5C30E9A1AB1CA5B002DD285 /* FolderSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C30E991AB1CA5B002DD285 /* FolderSelectionTableViewController.swift */; };
-		A5C30E9C1AB1D796002DD285 /* FolderCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C30E9B1AB1D796002DD285 /* FolderCreationViewController.swift */; };
+		A5C30E9C1AB1D796002DD285 /* TagCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C30E9B1AB1D796002DD285 /* TagCreationViewController.swift */; };
 		A5C30E9E1AB1E9C0002DD285 /* FolderImage.png in Resources */ = {isa = PBXBuildFile; fileRef = A5C30E9D1AB1E9C0002DD285 /* FolderImage.png */; };
 		A5DFAAB51ABCDC040064FB6C /* TagIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DFAAB41ABCDC040064FB6C /* TagIcon.png */; };
 		A5DFAAB71ABCEA360064FB6C /* TagsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFAAB61ABCEA360064FB6C /* TagsTableViewController.swift */; };
@@ -57,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A5150E9C1AC48CE0003F4287 /* TagSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagSelectionTableViewController.swift; sourceTree = "<group>"; };
 		A519AAD81AC0839400D45EF2 /* FilteredTaggedItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilteredTaggedItemsTableViewController.swift; sourceTree = "<group>"; };
 		A51C45181ABD1E230020F0A8 /* CustomItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomItemTableViewCell.swift; sourceTree = "<group>"; };
 		A52DBE8E1AAA840F007CEA3D /* Italics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Italics.png; sourceTree = "<group>"; };
@@ -92,8 +93,7 @@
 		A56B5FDA1A928B670062608C /* AllItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewController.swift; sourceTree = "<group>"; };
 		A56B5FDC1A928BBC0062608C /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		A56B5FE01A9294210062608C /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
-		A5C30E991AB1CA5B002DD285 /* FolderSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderSelectionTableViewController.swift; sourceTree = "<group>"; };
-		A5C30E9B1AB1D796002DD285 /* FolderCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderCreationViewController.swift; sourceTree = "<group>"; };
+		A5C30E9B1AB1D796002DD285 /* TagCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCreationViewController.swift; sourceTree = "<group>"; };
 		A5C30E9D1AB1E9C0002DD285 /* FolderImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FolderImage.png; sourceTree = "<group>"; };
 		A5DFAAB41ABCDC040064FB6C /* TagIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TagIcon.png; sourceTree = "<group>"; };
 		A5DFAAB61ABCEA360064FB6C /* TagsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsTableViewController.swift; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 				A56B5FBE1A92893E0062608C /* Main.storyboard */,
 				A56B5FDA1A928B670062608C /* AllItemsTableViewController.swift */,
 				A56B5FBC1A92893E0062608C /* ItemPageViewController.swift */,
-				A5C30E991AB1CA5B002DD285 /* FolderSelectionTableViewController.swift */,
-				A5C30E9B1AB1D796002DD285 /* FolderCreationViewController.swift */,
+				A5150E9C1AC48CE0003F4287 /* TagSelectionTableViewController.swift */,
+				A5C30E9B1AB1D796002DD285 /* TagCreationViewController.swift */,
 				A55CDE911AAB4AAF00D71406 /* TextAlignmentViewController.swift */,
 				A56B5FDC1A928BBC0062608C /* ScannerViewController.swift */,
 				A5DFAAB61ABCEA360064FB6C /* TagsTableViewController.swift */,
@@ -347,12 +347,12 @@
 				A56B5FE11A9294210062608C /* CoreDataModel.swift in Sources */,
 				A56B5FBD1A92893E0062608C /* ItemPageViewController.swift in Sources */,
 				A5DFAAB71ABCEA360064FB6C /* TagsTableViewController.swift in Sources */,
-				A5C30E9A1AB1CA5B002DD285 /* FolderSelectionTableViewController.swift in Sources */,
+				A5150E9D1AC48CE0003F4287 /* TagSelectionTableViewController.swift in Sources */,
 				A5EE67BA1A93E61A002A5A9B /* Helper.swift in Sources */,
 				A519AAD91AC0839400D45EF2 /* FilteredTaggedItemsTableViewController.swift in Sources */,
 				A51C45191ABD1E230020F0A8 /* CustomItemTableViewCell.swift in Sources */,
 				A56B5FBB1A92893E0062608C /* CloudInventory.xcdatamodeld in Sources */,
-				A5C30E9C1AB1D796002DD285 /* FolderCreationViewController.swift in Sources */,
+				A5C30E9C1AB1D796002DD285 /* TagCreationViewController.swift in Sources */,
 				A56B5FDB1A928B670062608C /* AllItemsTableViewController.swift in Sources */,
 				A55CDE921AAB4AAF00D71406 /* TextAlignmentViewController.swift in Sources */,
 				A56B5FDD1A928BBC0062608C /* ScannerViewController.swift in Sources */,

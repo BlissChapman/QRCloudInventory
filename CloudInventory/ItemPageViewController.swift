@@ -1,10 +1,6 @@
 import UIKit
 import CoreData
 
-//protocol ItemPageDataSource: class {
-//    func folderNameForItemPage(sender: ItemPageViewController) -> String?
-//}
-
 class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var trashButton: UIBarButtonItem!
@@ -19,56 +15,60 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var actionButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
-    
-    //    weak var dataSource: ItemPageDataSource?
     var selectTitleAutomatically = true
-    var qrCode: UIImage? {
-        didSet {
-            qrCodeImageView.image = qrCode
-        }
+    private var qrCode: UIImage? {
+        didSet { qrCodeImageView.image = qrCode }
     }
-    var itemImage: UIImage? {
+    private var itemImage: UIImage? {
         didSet {
             pictureImageView.image = itemImage
             themeImageView.image = itemImage
-            //primaryColor = UIColor(patternImage: itemImage!).colorWithAlphaComponent(0.5)
         }
     }
-    var stringToEncode: String?
-    lazy var utilitiesHelper = Helper()
+    private lazy var utilitiesHelper = Helper()
     
-    //All properties for updating an existing item's info
+    //All properties for updating an existing item's info - property observers update ui as necessary
     var existingItem: ItemCoreDataModel?
-    var itemTitle: String?
-    var itemSubtitle: String?
-    var itemNotes: String?
-    var itemPhoto: NSData?
-    var itemQrCodeNSData: NSData?
-    var folderName: String? {
-        get {
-            return NSUserDefaults.standardUserDefaults().valueForKey("lastFolderNameSelected") as? String
+    private var itemTitle: String? {
+        didSet { titleTextField.text = itemTitle }
+    }
+    private var itemSubtitle: String? {
+        didSet { subtitleTextField.text = itemSubtitle }
+    }
+    private var itemNotes: String? {
+        didSet { notesTextView.text = itemNotes }
+    }
+    private var itemPhoto: NSData? {
+        didSet {
+            if let imageRetrieved = itemPhoto {
+                itemImage = UIImage(data: imageRetrieved)
+            }
         }
-        set {
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "lastFolderNameSelected")
-            NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    private var itemQrCodeNSData: NSData? {
+        didSet {
+            if let qrCodeImageRetrieved = itemQrCodeNSData {
+                qrCode = UIImage(data: qrCodeImageRetrieved)
+            }
         }
+    }
+    private var tagNames: String? {
+        get { return NSUserDefaults.standardUserDefaults().valueForKey("lastTagNameSelected") as? String }
+        set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "lastTagNameSelected")
+            NSUserDefaults.standardUserDefaults().synchronize() }
     }
     var indexOfCurrentItemInMyInventoryArray: Int? {
-        get {
-            return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
-        }
-        set {
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "indexOfCurrentItemInMyInventoryArray")
-            NSUserDefaults.standardUserDefaults().synchronize()
-        }
+        get { return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
+        } set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "indexOfCurrentItemInMyInventoryArray")
+            NSUserDefaults.standardUserDefaults().synchronize() }
     }
+    
     //If the item is just being created
-    var newItem: ItemCoreDataModel?
+    private var newItem: ItemCoreDataModel?
     
-    
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("CURRENT INDEX IS: \(indexOfCurrentItemInMyInventoryArray)")
         if indexOfCurrentItemInMyInventoryArray != nil {
             setAllPropertiesFromIndex(indexOfCurrentItemInMyInventoryArray!)
         } else if existingItem != nil {
@@ -77,13 +77,9 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemNotes = existingItem?.notes
             itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
             itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
-            folderName = existingItem!.folder
+            tagNames = existingItem!.tags
         }
-        if existingItem != nil {
-            displayItemInfo()
-            saveButton.title = "Done"
-        }
-        
+        saveButton.title = "Done"
         textViewToolbar.removeFromSuperview()
         titleTextField.delegate = self
         if selectTitleAutomatically == true {
@@ -93,7 +89,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         notesTextView.inputAccessoryView = textViewToolbar
     }
     
-    func setAllPropertiesFromIndex(index: Int) {
+    private func setAllPropertiesFromIndex(index: Int) {
         var myInventory = [AnyObject]()
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
@@ -104,39 +100,37 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         existingItem = myInventory[index] as? ItemCoreDataModel
         
         if existingItem != nil {
-            println(existingItem?.title)
             itemTitle = existingItem?.title
             itemSubtitle = existingItem?.subtitle
             itemNotes = existingItem?.notes
             itemPhoto = existingItem?.valueForKey("photoOfItem") as? NSData
             itemQrCodeNSData = existingItem?.valueForKey("qrCodeImage") as? NSData
-            folderName = existingItem?.folder
+            tagNames = existingItem?.tags
         }
     }
     
-    @IBAction func saveTapped(sender: AnyObject) {
+    // MARK: - IBActions
+    @IBAction private func saveTapped(sender: AnyObject) {
         saveAll()
-        //clear chosen folder value
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastFolderNameSelected")
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastTagNameSelected")
         NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
         NSUserDefaults.standardUserDefaults().synchronize()
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
-    @IBAction func cancelTapped(sender: AnyObject) {
-        //clear selected folder value
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastFolderNameSelected")
+    @IBAction private func cancelTapped(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastTagNameSelected")
         NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
         NSUserDefaults.standardUserDefaults().synchronize()
         
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
-    @IBAction func actionButtonTapped(sender: UIBarButtonItem) {
+    @IBAction private func actionButtonTapped(sender: UIBarButtonItem) {
         generateActionPopup(utilitiesHelper.convertQRCodeToData(qrCode!, jpeg: false), qrCodeImage: qrCode!, currentItemTitle: titleTextField.text)
     }
     
-    @IBAction func trashTapped(sender: UIBarButtonItem) {
+    @IBAction private func trashTapped(sender: UIBarButtonItem) {
         var actionSheet = UIAlertController(title: "Trash", message: "Are you sure you want to delete this item?", preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { action in
             let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
@@ -162,38 +156,26 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
-    @IBAction func cameraTapped(sender: AnyObject) {
-        createPhotoActionSheet()
-    }
+    @IBAction private func cameraTapped(sender: AnyObject) { createPhotoActionSheet() }
+    @IBAction private func doneTyping(sender: UIBarButtonItem) { notesTextView.resignFirstResponder() }
     
-    @IBAction func doneTyping(sender: UIBarButtonItem) {
-        notesTextView.resignFirstResponder()
-    }
-    //    @IBAction func folderTapped(sender: UIBarButtonItem) {
-    //        var folderSelectionPopover = UIPopoverController(contentViewController: FolderSelectionTableViewController())
-    //        folderSelectionPopover.presentPopoverFromBarButtonItem(organizeButton, permittedArrowDirections: .Up, animated: true)
-    //    }
+    func textFieldShouldReturn(textField: UITextField) -> Bool { textField.resignFirstResponder(); return true }
     
+//    func displayItemInfo() {
+//        if itemQrCodeNSData != nil {
+//            qrCode = UIImage(data: itemQrCodeNSData!)
+//        }
+//        if itemPhoto != nil {
+//            itemImage = UIImage(data: itemPhoto!)
+//        }
+//        titleTextField.text = itemTitle
+//        subtitleTextField.text = itemSubtitle
+//        notesTextView.text = itemNotes
+//    }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func displayItemInfo() {
-        if itemQrCodeNSData != nil {
-            qrCode = UIImage(data: itemQrCodeNSData!)
-        }
-        if itemPhoto != nil {
-            itemImage = UIImage(data: itemPhoto!)
-        }
-        titleTextField.text = itemTitle
-        subtitleTextField.text = itemSubtitle
-        notesTextView.text = itemNotes
-    }
-    
-    func saveAll() {
-        if titleTextField.text == nil || titleTextField.text == "" {
+    // MARK: - Saving Data
+    private func saveAll() {
+        if titleTextField.text == nil || titleTextField.text == "" || titleTextField.text == " " {
             var noTitleAlert = UIAlertController(title: "Title is required", message: "Please add a title to your item.", preferredStyle: .Alert)
             noTitleAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -209,7 +191,6 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         
         var qrCodeImageToSave: NSData?
         
-        
         if existingItem != nil { //updating existing item
             existingItem?.title = titleTextField.text
             existingItem?.subtitle = subtitleTextField.text
@@ -218,7 +199,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                 existingItem?.photoOfItem = pngOfPhoto
             }
             existingItem?.dateLastEdited = NSDate()
-            existingItem?.folder = folderName
+            existingItem?.tags = tagNames
         } else if existingItem == nil { //creating new item
             newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
             newItem?.title = titleTextField.text
@@ -226,16 +207,16 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             newItem?.notes = notesTextView.text
             newItem?.dateLastEdited = NSDate()
             newItem?.dateCreated = NSDate()
-            newItem?.folder = folderName
+            newItem?.tags = tagNames
             if let pngImage = UIImageJPEGRepresentation(itemImage, 1.0) {
                 newItem?.photoOfItem = pngImage
             }
             
             //if qr code doesn't exist when save is tapped, generate a new one.
             if qrCode == nil {
-                stringToEncode = utilitiesHelper.generateIdString(titleTextField.text, subtitle: subtitleTextField.text, notes: notesTextView.text)
-                qrCode = utilitiesHelper.generateQRCodeForString(stringToEncode!)
-                newItem?.idString = stringToEncode!
+                let qrTuple = utilitiesHelper.generateQRCodeForString(titleTextField.text, subtitle: subtitleTextField.text, notes: notesTextView.text, fromString: nil)
+                qrCode = qrTuple.qrCode
+                newItem?.idString = qrTuple.encodedString
             }
             if qrCode != nil {
                 var qrCodeNSData = utilitiesHelper.convertQRCodeToData(qrCode!, jpeg: true)
@@ -378,29 +359,16 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                         ppc.delegate = self
                     }
                 }
-            case "FolderSelection":
-                if let vc = segue.destinationViewController as? FolderSelectionTableViewController {
+            case "TagSelection":
+                if let vc = segue.destinationViewController as? TagSelectionTableViewController {
+                    println("here1")
                     if let ppc = vc.popoverPresentationController {
+                        println("here2")
                         ppc.delegate = self
+                        println("here3")
                     }
-                    
-                    //                    if let currentIndex = indexOfCurrentItemInMyInventoryArray {
-                    //                        vc.folderSelectionIndexOfCurrentItemInMyInventoryArray = currentIndex
-                    //                    }
-                    
-                    //                    vc.tempItemTitle = titleTextField.text
-                    //                    vc.tempExistingItem = existingItem
-                    //                    vc.tempNewItem = newItem
-                    //                    vc.itemSubtitle = subtitleTextField.text
-                    //                    vc.tempItemNotes = notesTextView.text
-                    //                    vc.tempItemImage = itemImage
-                    //                    vc.tempItemQRCodeNSData = itemQrCodeNSData
-                    //                    vc.tempFolderName = folderName
-                    
+                    println("here4")
                 }
-                //preserve values to repopulate after folder is chosen
-                //existingItem, newItem, itemTitle, itemSubtitle, itemNotes, itemPhoto, itemQRCodeNSData, folderName all need to be preserved
-                
             default: break
             }
         }

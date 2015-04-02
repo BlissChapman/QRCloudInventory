@@ -11,7 +11,7 @@ import CoreData
 
 class TagsTableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
-    var myFolders = [AnyObject]()
+    var myTags = [AnyObject]()
     
 
     override func viewDidLoad() {
@@ -23,7 +23,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: "Folder Created", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: "Tag Created", object: nil)
     }
     
     func reloadInfo() {
@@ -40,10 +40,10 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
-        let folderFrequency = NSFetchRequest(entityName: "Folder")
+        let tagFrequency = NSFetchRequest(entityName: "Tag")
         
         var err: NSError?
-        myFolders = context.executeFetchRequest(folderFrequency, error: &err)!
+        myTags = context.executeFetchRequest(tagFrequency, error: &err)!
     }
 
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -57,7 +57,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myFolders.count
+        return myTags.count
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -66,9 +66,9 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(myFolders[indexPath.row] as NSManagedObject)
+            context.deleteObject(myTags[indexPath.row] as NSManagedObject)
             
-            myFolders.removeAtIndex(indexPath.row)
+            myTags.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             
             var error: NSError? = nil
@@ -82,7 +82,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("tagCell", forIndexPath: indexPath) as UITableViewCell
         
-        if let itemToDisplay = self.myFolders[indexPath.row] as? FolderCoreDataModel {
+        if let itemToDisplay = self.myTags[indexPath.row] as? TagCoreDataModel {
             cell.textLabel?.text = itemToDisplay.name
         }
         
@@ -135,18 +135,18 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-            case "FolderCreation":
-                if let vc = segue.destinationViewController as? FolderCreationViewController {
+            case "TagCreation":
+                if let vc = segue.destinationViewController as? TagCreationViewController {
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
                 }
             case "filteredTaggedItems":
                 if let vc = segue.destinationViewController as? FilteredTaggedItemsTableViewController {
-                    println(self.myFolders[self.tableView.indexPathForSelectedRow()!.row].name)
+                    println(self.myTags[self.tableView.indexPathForSelectedRow()!.row].name)
                     let filteredResultsView: FilteredTaggedItemsTableViewController = segue.destinationViewController as FilteredTaggedItemsTableViewController
                     
-                    filteredResultsView.tagToSearch = self.myFolders[self.tableView.indexPathForSelectedRow()!.row].name
+                    filteredResultsView.tagToSearch = self.myTags[self.tableView.indexPathForSelectedRow()!.row].name
                 }
                 
             default: break

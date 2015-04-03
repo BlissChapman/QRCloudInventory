@@ -28,9 +28,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     private lazy var utilitiesHelper = Helper()
     
     //All properties for updating an existing item's info - property observers update ui as necessary
+    
+    //crashes because outlets havent been set at this point.
     var existingItem: ItemCoreDataModel?
     private var itemTitle: String? {
-        didSet { titleTextField.text = itemTitle }
+        didSet {
+            titleTextField.text = itemTitle
+        }
     }
     private var itemSubtitle: String? {
         didSet { subtitleTextField.text = itemSubtitle }
@@ -161,17 +165,17 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func textFieldShouldReturn(textField: UITextField) -> Bool { textField.resignFirstResponder(); return true }
     
-//    func displayItemInfo() {
-//        if itemQrCodeNSData != nil {
-//            qrCode = UIImage(data: itemQrCodeNSData!)
-//        }
-//        if itemPhoto != nil {
-//            itemImage = UIImage(data: itemPhoto!)
-//        }
-//        titleTextField.text = itemTitle
-//        subtitleTextField.text = itemSubtitle
-//        notesTextView.text = itemNotes
-//    }
+    //    func displayItemInfo() {
+    //        if itemQrCodeNSData != nil {
+    //            qrCode = UIImage(data: itemQrCodeNSData!)
+    //        }
+    //        if itemPhoto != nil {
+    //            itemImage = UIImage(data: itemPhoto!)
+    //        }
+    //        titleTextField.text = itemTitle
+    //        subtitleTextField.text = itemSubtitle
+    //        notesTextView.text = itemNotes
+    //    }
     
     // MARK: - Saving Data
     private func saveAll() {

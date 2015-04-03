@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class TagSelectionTableViewController: ItemPageViewController, UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate {
+class TagSelectionTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet var tableView: UITableView!
     
@@ -23,6 +23,7 @@ class TagSelectionTableViewController: ItemPageViewController, UITableViewDataSo
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
     }
     
     override func viewDidLoad() {
@@ -124,7 +125,7 @@ class TagSelectionTableViewController: ItemPageViewController, UITableViewDataSo
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     //popover delegate
-    override func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
     

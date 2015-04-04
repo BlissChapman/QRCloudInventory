@@ -12,30 +12,19 @@ import CoreData
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
-    var mySession = AVCaptureSession()
-    var preview = AVCaptureVideoPreviewLayer()
-    var myDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
-    var myOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
-    var myInput: AVCaptureDeviceInput = AVCaptureDeviceInput()
-    var encodedStringValue: String?
-    
-    lazy var utilitiesHelper = Helper()
-    
-    var selectedItem: ItemCoreDataModel?
-    var newItem: ItemCoreDataModel?
-    
-    var myFetchRequestArray: [AnyObject] = []
-    
-    var qrCodeFrameView = UIView()
-    var qrCodeImage: UIImage?
-    
+    private var mySession = AVCaptureSession()
+    private var preview = AVCaptureVideoPreviewLayer()
+    private var encodedStringValue: String?
+    private lazy var utilitiesHelper = Helper()
+    private var selectedItem: ItemCoreDataModel?
+    private var qrCodeFrameView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             noCameraAlert()
         } else {
-            setupScanner()
+            configureScanner()
             qrCodeFrameView.layer.borderColor = UIColor.greenColor().CGColor
             qrCodeFrameView.layer.borderWidth = 2
             view.addSubview(qrCodeFrameView)
@@ -44,9 +33,10 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    func setupScanner() {
-        myInput = AVCaptureDeviceInput.deviceInputWithDevice(myDevice, error: nil) as AVCaptureDeviceInput
+    private func configureScanner() {
+        let myInput = AVCaptureDeviceInput.deviceInputWithDevice(AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo), error: nil) as AVCaptureDeviceInput
         
+        var myOutput = AVCaptureMetadataOutput()
         mySession.addOutput(myOutput)
         mySession.addInput(myInput as AVCaptureInput)
         
@@ -60,7 +50,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         self.view.layer.insertSublayer(preview, atIndex: 0)
     }
     
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!,fromConnection connection: AVCaptureConnection!) {
+    internal func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!,fromConnection connection: AVCaptureConnection!) {
         if metadataObjects != nil && metadataObjects.count > 0 {
             
             let metadataObjectFound: AnyObject = metadataObjects[0]
@@ -76,7 +66,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    func stopScanning() {
+    private func stopScanning() {
         mySession.stopRunning()
         
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
@@ -87,9 +77,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         var myPredicate = NSPredicate(format: "idString = %@", encodedStringValue!)
         println(myPredicate)
         frequency.predicate = myPredicate
-        myFetchRequestArray = myContext.executeFetchRequest(frequency, error: nil)!
+        let myFetchRequestArray = myContext.executeFetchRequest(frequency, error: nil)!
         
-        println("there are \(myFetchRequestArray.count) fetch request results")
         println("the encoded string has a value of '\(encodedStringValue);")
         if myFetchRequestArray.count == 0 && encodedStringValue != nil {
             var createNewItem = UIAlertController(title: "Not item in Inventory", message: "Would you like to create a new item for this code?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -104,21 +93,22 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
                 let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
                 let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
-                self.newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
-                self.newItem?.title = self.encodedStringValue!
-                self.newItem?.subtitle = nil
-                self.newItem?.notes = nil
-                self.newItem?.photoOfItem = nil
-                self.newItem?.dateLastEdited = NSDate()
-                self.newItem?.dateCreated = NSDate()
-                self.newItem?.tags = nil
                 
+                var newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
+                newItem.title = self.encodedStringValue!
+                newItem.subtitle = nil
+                newItem.notes = nil
+                newItem.photoOfItem = nil
+                newItem.dateLastEdited = NSDate()
+                newItem.dateCreated = NSDate()
+                newItem.tags = nil
                 
+            
                 //SHOULD CHECK IF ID STRING WITH THIS VALUE EXISTS - ns predicate
-                self.newItem?.idString = self.encodedStringValue!
+                newItem.idString = self.encodedStringValue!
                 
                 //recreates qr code from extracted string then converts to nsdata
-                self.newItem?.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString("", subtitle: "", notes: "", fromString: self.encodedStringValue!).qrCode, jpeg: true)
+                newItem.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString("", subtitle: "", notes: "", fromString: self.encodedStringValue!).qrCode, jpeg: true)
         
                 myContext.save(nil)
                 self.performSegueWithIdentifier("toTableView", sender: self)
@@ -138,7 +128,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    func noCameraAlert() {
+    private func noCameraAlert() {
         var noCameraAlert = UIAlertController(title: "Error", message: "Device has no camera", preferredStyle: .Alert)
         noCameraAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -154,18 +144,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 myItemViewController.existingItem = selectedItem
             }
             myItemViewController.selectTitleAutomatically = false
-//            if newItem != nil {
-//                println("newItem information")
-//                myItemViewController.newItem = newItem
-//                if encodedStringValue != nil {
-//                    println("string value is not nil")
-//                    myItemViewController.itemTitle = encodedStringValue
-//                }
-//                if qrCodeImage != nil {
-//                    println("the image isnt nil...somehow")
-//                    myItemViewController.qrCode = qrCodeImage
-//                }
-//            }
         }
     }
     

@@ -25,9 +25,6 @@ class AllItemsTableViewController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = true
         tableView.separatorColor = UIColor.blackColor()
         tableView.separatorInset = UIEdgeInsetsZero
-        
-        var idStringRetrieved = ""
-        var myPredicate = NSPredicate(format: "idString = %@", idStringRetrieved)
     }
     
     // MARK: - Table View Configuration
@@ -102,7 +99,6 @@ class AllItemsTableViewController: UITableViewController {
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
                 myItemPageViewController.hidesBottomBarWhenPushed = true
             case "update":
-                println("The row selected: \(self.tableView.indexPathForSelectedRow()!.row)")
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
                 myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)
                 myItemPageViewController.selectTitleAutomatically = false

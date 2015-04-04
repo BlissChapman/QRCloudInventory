@@ -16,6 +16,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
     var selectTitleAutomatically = true
+    
+    //All properties for updating an existing item's info - property observers update ui as necessary
     private var qrCode: UIImage? {
         didSet { qrCodeImageView.image = qrCode }
     }
@@ -27,9 +29,6 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     private lazy var utilitiesHelper = Helper()
     
-    //All properties for updating an existing item's info - property observers update ui as necessary
-    
-    //crashes because outlets havent been set at this point.
     var existingItem: ItemCoreDataModel?
     private var itemTitle: String? {
         didSet {
@@ -119,7 +118,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastTagNameSelected")
         NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
         NSUserDefaults.standardUserDefaults().synchronize()
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewControllerAnimated(true)
     }
     
     @IBAction private func cancelTapped(sender: AnyObject) {
@@ -127,7 +126,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
         NSUserDefaults.standardUserDefaults().synchronize()
         
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewControllerAnimated(true)
     }
     
     @IBAction private func actionButtonTapped(sender: UIBarButtonItem) {
@@ -157,25 +156,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         actionSheet.popoverPresentationController?.barButtonItem = trashButton
         actionSheet.popoverPresentationController?.sourceView = self.view
         
-        self.presentViewController(actionSheet, animated: true, completion: nil)
+        presentViewController(actionSheet, animated: true, completion: nil)
     }
     
     @IBAction private func cameraTapped(sender: AnyObject) { createPhotoActionSheet() }
     @IBAction private func doneTyping(sender: UIBarButtonItem) { notesTextView.resignFirstResponder() }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool { textField.resignFirstResponder(); return true }
-    
-    //    func displayItemInfo() {
-    //        if itemQrCodeNSData != nil {
-    //            qrCode = UIImage(data: itemQrCodeNSData!)
-    //        }
-    //        if itemPhoto != nil {
-    //            itemImage = UIImage(data: itemPhoto!)
-    //        }
-    //        titleTextField.text = itemTitle
-    //        subtitleTextField.text = itemSubtitle
-    //        notesTextView.text = itemNotes
-    //    }
+    internal func textFieldShouldReturn(textField: UITextField) -> Bool { textField.resignFirstResponder(); return true }
     
     // MARK: - Saving Data
     private func saveAll() {
@@ -184,7 +171,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             noTitleAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
                 self.dismissViewControllerAnimated(true, completion: nil)
             }))
-            self.presentViewController(noTitleAlert, animated: true, completion: nil)
+            presentViewController(noTitleAlert, animated: true, completion: nil)
             return
         }
         
@@ -230,8 +217,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         myContext.save(nil)
     }
     
-    //Making Action Sheet
-    func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) {
+    // MARK: - Other
+    private func generateActionPopup(qrCodeToPrint: NSData, qrCodeImage: UIImage, currentItemTitle: String) {
         var actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Print Code", style: UIAlertActionStyle.Default, handler: { action in
             var controller = self.utilitiesHelper.printFile(qrCodeToPrint, imageView: self.qrCodeImageView, jobTitle: self.titleTextField.text)
@@ -251,11 +238,11 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         actionSheet.popoverPresentationController?.barButtonItem = actionButton
         actionSheet.popoverPresentationController?.sourceView = self.view
         
-        self.presentViewController(actionSheet, animated: true, completion: nil)
+        presentViewController(actionSheet, animated: true, completion: nil)
     }
     
-    //CHOOSING/TAKING A PHOTO
-    func createPhotoActionSheet() {
+    // MARK: - Choosing Photo
+    private func createPhotoActionSheet() {
         if utilitiesHelper.determinePermissionStatus() == true {
             var camera = false
             var photoActionSheet = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
@@ -280,17 +267,17 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             photoActionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {action in
                 photoActionSheet.dismissViewControllerAnimated(true, completion: nil)
             }))
-            photoActionSheet.popoverPresentationController?.barButtonItem = self.cameraButton
-            photoActionSheet.popoverPresentationController?.sourceView = self.view
+            photoActionSheet.popoverPresentationController?.barButtonItem = cameraButton
+            photoActionSheet.popoverPresentationController?.sourceView = view
             
-            self.presentViewController(photoActionSheet, animated: true, completion: nil)
+            presentViewController(photoActionSheet, animated: true, completion: nil)
         } else {
             noCameraPermissionAlert()
         }
     }
     
     
-    func takeNew() {
+    private func takeNew() {
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let myAlertView = UIAlertView()
             myAlertView.title = "Error: Device has no camera or photo library."
@@ -302,10 +289,10 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         picker.allowsEditing = true
         picker.sourceType = UIImagePickerControllerSourceType.Camera
         
-        self.presentViewController(picker, animated: true, completion: nil)
+        presentViewController(picker, animated: true, completion: nil)
     }
     
-    func selectFromLibrary() {
+    private func selectFromLibrary() {
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
             let myAlertView = UIAlertView()
             myAlertView.title = "Error: Device has no photo library"
@@ -317,18 +304,18 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         picker.allowsEditing = true
         picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         
-        self.presentViewController(picker, animated: true, completion: nil)
+        presentViewController(picker, animated: true, completion: nil)
     }
     
-    func noCameraAlert() {
+    private func noCameraAlert() {
         var noCameraAlert = UIAlertController(title: "Error", message: "Device has no camera", preferredStyle: .Alert)
         noCameraAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
         }))
-        self.presentViewController(noCameraAlert, animated: true, completion: nil)
+        presentViewController(noCameraAlert, animated: true, completion: nil)
     }
     
-    func noCameraPermissionAlert() {
+    private func noCameraPermissionAlert() {
         var noCameraPermissionAlert = UIAlertController(title: "Permission Required", message: "We don't have permission to use your camera or photos.  Please revise your privacy settings. ", preferredStyle: .Alert)
         noCameraPermissionAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -337,19 +324,19 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             var appSettings: NSURL = NSURL(string: UIApplicationOpenSettingsURLString)!
             UIApplication.sharedApplication().openURL(appSettings)
         }))
-        self.presentViewController(noCameraPermissionAlert, animated: true, completion: nil)
+        presentViewController(noCameraPermissionAlert, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        itemImage = info["UIImagePickerControllerEditedImage"] as? UIImage
+    internal func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        itemImage = info[UIImagePickerControllerEditedImage] as? UIImage
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    internal func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    //popover delegate
+    // MARK: - Popover Delegate
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
@@ -365,13 +352,9 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
                 }
             case "TagSelection":
                 if let vc = segue.destinationViewController as? TagSelectionTableViewController {
-                    println("here1")
                     if let ppc = vc.popoverPresentationController {
-                        println("here2")
                         ppc.delegate = self
-                        println("here3")
                     }
-                    println("here4")
                 }
             default: break
             }

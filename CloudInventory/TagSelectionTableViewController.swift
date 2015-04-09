@@ -39,7 +39,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
     }
     
     func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let tagFrequency = NSFetchRequest(entityName: "Tag")
         
@@ -66,7 +66,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as UITableViewCell
+        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
         
         if let tag = self.tags[indexPath.row] as? TagCoreDataModel {
             cell.textLabel?.text = tag.name

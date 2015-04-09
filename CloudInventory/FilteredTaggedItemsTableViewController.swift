@@ -49,7 +49,7 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customTaggedItemViewCell") as CustomItemTableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customTaggedItemViewCell") as! CustomItemTableViewCell!
         
 //        var title: String = testArray[indexPath.row]
 //        println("title should be: \(title)")
@@ -76,11 +76,11 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
     
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(filteredResults![indexPath.row] as NSManagedObject)
+            context.deleteObject(filteredResults![indexPath.row] as! NSManagedObject)
             
             filteredResults!.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
@@ -121,8 +121,8 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "updateFromFiltered" {
-            var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as ItemCoreDataModel
-            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
+            var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel
+            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
             myItemPageViewController.existingItem = selectedItem
             myItemPageViewController.selectTitleAutomatically = false
             myItemPageViewController.hidesBottomBarWhenPushed = true

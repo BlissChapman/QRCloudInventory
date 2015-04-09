@@ -37,7 +37,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     }
     
     func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
         let tagFrequency = NSFetchRequest(entityName: "Tag")
@@ -62,11 +62,11 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(myTags[indexPath.row] as NSManagedObject)
+            context.deleteObject(myTags[indexPath.row] as! NSManagedObject)
             
             myTags.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
@@ -80,7 +80,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("tagCell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("tagCell", forIndexPath: indexPath) as! UITableViewCell
         
         if let itemToDisplay = self.myTags[indexPath.row] as? TagCoreDataModel {
             cell.textLabel?.text = itemToDisplay.name
@@ -144,7 +144,7 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
             case "filteredTaggedItems":
                 if let vc = segue.destinationViewController as? FilteredTaggedItemsTableViewController {
                     println(self.myTags[self.tableView.indexPathForSelectedRow()!.row].name)
-                    let filteredResultsView: FilteredTaggedItemsTableViewController = segue.destinationViewController as FilteredTaggedItemsTableViewController
+                    let filteredResultsView: FilteredTaggedItemsTableViewController = segue.destinationViewController as! FilteredTaggedItemsTableViewController
                     
                     filteredResultsView.tagToSearch = self.myTags[self.tableView.indexPathForSelectedRow()!.row].name
                 }

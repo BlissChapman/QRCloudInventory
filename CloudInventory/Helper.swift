@@ -133,7 +133,7 @@ class Helper {
     
     //Search core data for items with certain tag 
     func searchDatabaseForItemsWithTag(tag: String) -> [AnyObject]? {
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")

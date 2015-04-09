@@ -34,12 +34,12 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as! CustomItemTableViewCell!
         
         let itemToDisplay: AnyObject = self.myInventory[indexPath.row]
         
         if itemToDisplay is ItemCoreDataModel {
-            let item = itemToDisplay as ItemCoreDataModel
+            let item = itemToDisplay as! ItemCoreDataModel
             cell.cellTitle.text = itemToDisplay.title
             if item.photoOfItem != nil {
                 cell.backgroundImage.image = UIImage(data: item.photoOfItem!)
@@ -53,11 +53,11 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         if editingStyle == .Delete {
-            context.deleteObject(myInventory[indexPath.row] as NSManagedObject)
+            context.deleteObject(myInventory[indexPath.row] as! NSManagedObject)
             
             myInventory.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
@@ -84,7 +84,7 @@ class AllItemsTableViewController: UITableViewController {
     }
     
     private func reloadData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
         
@@ -96,15 +96,15 @@ class AllItemsTableViewController: UITableViewController {
         if let identifier = segue.identifier {
             switch identifier {
             case "addNew":
-                let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
+                let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.hidesBottomBarWhenPushed = true
             case "update":
-                let myItemPageViewController: ItemPageViewController = segue.destinationViewController as ItemPageViewController
+                let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)
                 myItemPageViewController.selectTitleAutomatically = false
                 myItemPageViewController.hidesBottomBarWhenPushed = true
             case "toScanner":
-                let myScannerViewController: ScannerViewController = segue.destinationViewController as ScannerViewController
+                let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController
                 myScannerViewController.hidesBottomBarWhenPushed = true
             default: break
             }

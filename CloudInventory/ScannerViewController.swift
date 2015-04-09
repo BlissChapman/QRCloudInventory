@@ -19,6 +19,12 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     private var selectedItem: ItemCoreDataModel?
     private var qrCodeFrameView = UIView()
     
+    struct ScanningConstants {
+        static let ItemSharingQREncodedTag = "This item was created by Cloud Inventory."
+        static let ItemPageSegue = "toItemPage"
+        static let TableViewSegue = "toTableView"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
@@ -34,7 +40,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     private func configureScanner() {
-        let myInput = AVCaptureDeviceInput.deviceInputWithDevice(AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo), error: nil) as AVCaptureDeviceInput
+        let myInput = AVCaptureDeviceInput.deviceInputWithDevice(AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo), error: nil) as! AVCaptureDeviceInput
         
         var myOutput = AVCaptureMetadataOutput()
         mySession.addOutput(myOutput)
@@ -43,7 +49,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         myOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
         myOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
         
-        preview = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as AVCaptureVideoPreviewLayer
+        preview = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as! AVCaptureVideoPreviewLayer
         preview.videoGravity = AVLayerVideoGravityResizeAspectFill
         preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
         
@@ -55,7 +61,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             
             let metadataObjectFound: AnyObject = metadataObjects[0]
             if metadataObjectFound.type == AVMetadataObjectTypeQRCode {
-                let barCodeObject = preview?.transformedMetadataObjectForMetadataObject(metadataObjectFound as AVMetadataMachineReadableCodeObject) as AVMetadataMachineReadableCodeObject
+                let barCodeObject = preview?.transformedMetadataObjectForMetadataObject(metadataObjectFound as! AVMetadataMachineReadableCodeObject) as! AVMetadataMachineReadableCodeObject
                 qrCodeFrameView.frame = barCodeObject.bounds
                 encodedStringValue = metadataObjectFound.stringValue
                 utilitiesHelper.playBeepSound()
@@ -69,7 +75,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     private func stopScanning() {
         mySession.stopRunning()
         
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")
@@ -90,9 +96,15 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             }))
             createNewItem.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { action in
                 self.dismissViewControllerAnimated(true, completion: nil)
-                let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+                let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
                 let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
+                
+                //println(ScanningConstants.ItemSharingQREncodedTag)
+                let indexOfItemSharingTag: Int = count(ScanningConstants.ItemSharingQREncodedTag)
+                let openingEncodedString = NSString.substringToIndex(ScanningConstants.ItemSharingQREncodedTag)
+                
+                println("opening encoded string = \(openingEncodedString(indexOfItemSharingTag))")
                 
                 var newItem = ItemCoreDataModel(entity: myEntity!, insertIntoManagedObjectContext: myContext)
                 newItem.title = self.encodedStringValue!
@@ -111,7 +123,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 newItem.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString("", subtitle: "", notes: "", fromString: self.encodedStringValue!).qrCode, jpeg: true)
         
                 myContext.save(nil)
-                self.performSegueWithIdentifier("toTableView", sender: self)
+                self.performSegueWithIdentifier(ScanningConstants.TableViewSegue, sender: self)
+                self.performSegueWithIdentifier(ScanningConstants.ItemPageSegue, sender: self)
             }))
             self.presentViewController(createNewItem, animated: true, completion: nil)
         } else if myFetchRequestArray.count == 0 && encodedStringValue == nil {
@@ -123,8 +136,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             self.presentViewController(fakeQRCode, animated: true, completion: nil)
         } else {
             selectedItem = myFetchRequestArray[0] as? ItemCoreDataModel
-            self.performSegueWithIdentifier("toTableView", sender: self)
-            self.performSegueWithIdentifier("toItemPage", sender: self)
+            self.performSegueWithIdentifier(ScanningConstants.TableViewSegue, sender: self)
+            self.performSegueWithIdentifier(ScanningConstants.ItemPageSegue, sender: self)
         }
     }
     
@@ -138,8 +151,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "toItemPage" {
-            let myItemViewController = segue.destinationViewController as ItemPageViewController
+        if segue.identifier == ScanningConstants.ItemSharingQREncodedTag {
+            let myItemViewController = segue.destinationViewController as! ItemPageViewController
             if selectedItem != nil {
                 myItemViewController.existingItem = selectedItem
             }

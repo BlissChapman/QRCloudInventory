@@ -49,7 +49,7 @@ class TagCreationViewController: UIViewController, UITextFieldDelegate {
     }
 
     func createTag(name: String) {
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("Tag", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "Tag")
@@ -66,7 +66,7 @@ class TagCreationViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkData() {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let tagFrequency = NSFetchRequest(entityName: "Tag")
         

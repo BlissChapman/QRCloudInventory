@@ -73,6 +73,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         if indexOfCurrentItemInMyInventoryArray != nil {
+            println("index is being set")
             setAllPropertiesFromIndex(indexOfCurrentItemInMyInventoryArray!)
         } else if existingItem != nil {
             itemTitle = existingItem?.title
@@ -94,22 +95,24 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     
     private func setAllPropertiesFromIndex(index: Int) {
         var myInventory = [AnyObject]()
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
         var err: NSError?
         myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
         
-        existingItem = myInventory[index] as? ItemCoreDataModel
-        
-        if existingItem != nil {
-            itemTitle = existingItem?.title
-            itemSubtitle = existingItem?.subtitle
-            itemNotes = existingItem?.notes
-            itemPhoto = existingItem?.valueForKey("photoOfItem") as? NSData
-            itemQrCodeNSData = existingItem?.valueForKey("qrCodeImage") as? NSData
-            tagNames = existingItem?.tags
+        if let existingItem = myInventory[index] as? ItemCoreDataModel {
+            itemTitle = existingItem.title
+            itemSubtitle = existingItem.subtitle
+            itemNotes = existingItem.notes
+            itemPhoto = existingItem.valueForKey("photoOfItem") as? NSData
+            itemQrCodeNSData = existingItem.valueForKey("qrCodeImage") as? NSData
+            tagNames = existingItem.tags
         }
+        
+//        if existingItem != nil {
+//            
+//        }
     }
     
     // MARK: - IBActions
@@ -136,7 +139,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBAction private func trashTapped(sender: UIBarButtonItem) {
         var actionSheet = UIAlertController(title: "Trash", message: "Are you sure you want to delete this item?", preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { action in
-            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             let context: NSManagedObjectContext = appDelegate.managedObjectContext!
             
             if self.existingItem != nil {
@@ -175,7 +178,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             return
         }
         
-        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
         let frequency = NSFetchRequest(entityName: "InventoryItem")

@@ -19,10 +19,13 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     private var selectedItem: ItemCoreDataModel?
     private var qrCodeFrameView = UIView()
     
-    struct ScanningConstants {
+    private struct Constants {
         static let ItemSharingQREncodedTag = "This item was created by Cloud Inventory."
-        static let ItemPageSegue = "toItemPage"
-        static let TableViewSegue = "toTableView"
+    }
+    
+    private struct Segues {
+        static let ItemPage = AllSegues.UpdateItemFromScanner
+        static let TableView = AllSegues.BackToTableView
     }
     
     override func viewDidLoad() {
@@ -77,8 +80,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
-        let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
-        let frequency = NSFetchRequest(entityName: "InventoryItem")
+        let myEntity = NSEntityDescription.entityForName(CoreData.ItemEntity, inManagedObjectContext: myContext)
+        let frequency = NSFetchRequest(entityName: CoreData.ItemEntity)
         
         var myPredicate = NSPredicate(format: "idString = %@", encodedStringValue!)
         println(myPredicate)
@@ -98,11 +101,11 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 self.dismissViewControllerAnimated(true, completion: nil)
                 let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
-                let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
+                let myEntity = NSEntityDescription.entityForName(CoreData.ItemEntity, inManagedObjectContext: myContext)
                 
                 //println(ScanningConstants.ItemSharingQREncodedTag)
-                let indexOfItemSharingTag: Int = count(ScanningConstants.ItemSharingQREncodedTag)
-                let openingEncodedString = NSString.substringToIndex(ScanningConstants.ItemSharingQREncodedTag)
+                let indexOfItemSharingTag: Int = count(Constants.ItemSharingQREncodedTag)
+                let openingEncodedString = NSString.substringToIndex(Constants.ItemSharingQREncodedTag)
                 
                 println("opening encoded string = \(openingEncodedString(indexOfItemSharingTag))")
                 
@@ -115,29 +118,29 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 newItem.dateCreated = NSDate()
                 newItem.tags = nil
                 
-            
+                
                 //SHOULD CHECK IF ID STRING WITH THIS VALUE EXISTS - ns predicate
                 newItem.idString = self.encodedStringValue!
                 
                 //recreates qr code from extracted string then converts to nsdata
                 newItem.qrCodeImage = self.utilitiesHelper.convertQRCodeToData(self.utilitiesHelper.generateQRCodeForString("", subtitle: "", notes: "", fromString: self.encodedStringValue!).qrCode, jpeg: true)
-        
+                
                 myContext.save(nil)
-                self.performSegueWithIdentifier(ScanningConstants.TableViewSegue, sender: self)
-                self.performSegueWithIdentifier(ScanningConstants.ItemPageSegue, sender: self)
+                self.performSegueWithIdentifier(Segues.TableView, sender: self)
+                self.performSegueWithIdentifier(Segues.ItemPage, sender: self)
             }))
-            self.presentViewController(createNewItem, animated: true, completion: nil)
+            presentViewController(createNewItem, animated: true, completion: nil)
         } else if myFetchRequestArray.count == 0 && encodedStringValue == nil {
             var fakeQRCode = UIAlertController(title: "QR code has no associated value.", message: "The code found does not have any readable information.", preferredStyle: UIAlertControllerStyle.Alert)
             fakeQRCode.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
                 self.dismissViewControllerAnimated(true, completion: nil)
                 self.mySession.startRunning()
             }))
-            self.presentViewController(fakeQRCode, animated: true, completion: nil)
+            presentViewController(fakeQRCode, animated: true, completion: nil)
         } else {
             selectedItem = myFetchRequestArray[0] as? ItemCoreDataModel
-            self.performSegueWithIdentifier(ScanningConstants.TableViewSegue, sender: self)
-            self.performSegueWithIdentifier(ScanningConstants.ItemPageSegue, sender: self)
+            performSegueWithIdentifier(Segues.TableView, sender: self)
+            performSegueWithIdentifier(Segues.ItemPage, sender: self)
         }
     }
     
@@ -147,18 +150,20 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             self.dismissViewControllerAnimated(true, completion: nil)
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
-        self.presentViewController(noCameraAlert, animated: true, completion: nil)
+        presentViewController(noCameraAlert, animated: true, completion: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == ScanningConstants.ItemSharingQREncodedTag {
-            let myItemViewController = segue.destinationViewController as! ItemPageViewController
-            if selectedItem != nil {
-                myItemViewController.existingItem = selectedItem
+        if let identifier = segue.identifier {
+            switch identifier {
+            case Segues.ItemPage:
+                let myItemViewController = segue.destinationViewController as! ItemPageViewController
+                if selectedItem != nil {
+                    myItemViewController.existingItem = selectedItem
+                }
+                myItemViewController.selectTitleAutomatically = false
+                default: break
             }
-            myItemViewController.selectTitleAutomatically = false
         }
     }
-    
-    
 }

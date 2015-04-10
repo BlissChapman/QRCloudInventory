@@ -10,6 +10,12 @@ import UIKit
 
 class TextAlignmentViewController: UIViewController {
     
+    private struct Align {
+        static let Left = "AlignLeft"
+        static let Center = "AlignCenter"
+        static let Right = "AlignRight"
+    }
+    
     override var preferredContentSize: CGSize {
         get {
             if presentingViewController != nil {
@@ -31,17 +37,17 @@ class TextAlignmentViewController: UIViewController {
     @IBAction func optionSelected(sender: UIButton) {
         //notesTextView.text = "alignLeft was tapped"
         switch sender.currentTitle! {
-        case "AlignLeft":
+        case Align.Left:
             println("alignLeft!")
             //UITextViewAlignment
-        case "AlignCenter":
+        case Align.Center:
             println("alignCenter!")
-        case "AlignRight":
+        case Align.Right:
             println("alignRight!")
         default:
             println("nothing selected")
         }
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

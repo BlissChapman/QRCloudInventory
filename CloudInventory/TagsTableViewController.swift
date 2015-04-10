@@ -13,6 +13,10 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     
     var myTags = [AnyObject]()
     
+    private struct Segues {
+        static let CreateTag = AllSegues.CreateTag
+        static let FilteredTags = AllSegues.FilteredItems
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +43,8 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     func reloadData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
-        let tagFrequency = NSFetchRequest(entityName: "Tag")
+        let itemFrequency = NSFetchRequest(entityName: CoreData.ItemEntity)
+        let tagFrequency = NSFetchRequest(entityName: CoreData.TagEntity)
         
         var err: NSError?
         myTags = context.executeFetchRequest(tagFrequency, error: &err)!
@@ -135,13 +139,13 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-            case "TagCreation":
+            case Segues.CreateTag:
                 if let vc = segue.destinationViewController as? TagCreationViewController {
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
                 }
-            case "filteredTaggedItems":
+            case Segues.FilteredTags:
                 if let vc = segue.destinationViewController as? FilteredTaggedItemsTableViewController {
                     println(self.myTags[self.tableView.indexPathForSelectedRow()!.row].name)
                     let filteredResultsView: FilteredTaggedItemsTableViewController = segue.destinationViewController as! FilteredTaggedItemsTableViewController

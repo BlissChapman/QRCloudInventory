@@ -13,6 +13,16 @@ class AllItemsTableViewController: UITableViewController {
     
     private var myInventory = [AnyObject]()
     
+    private struct Constants {
+        static let TableViewCellID = "customItemTableViewCell"
+    }
+    
+    private struct Segues {
+        static let AddNew = AllSegues.AddNewItem
+        static let Update = AllSegues.UpdateItem
+        static let Scanner = AllSegues.ScanItem
+    }
+    
     // MARK: - View Controller Lifecycle
     override func viewWillAppear(animated: Bool) {
         reloadData()
@@ -34,7 +44,7 @@ class AllItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as! CustomItemTableViewCell!
+        var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier(Constants.TableViewCellID) as! CustomItemTableViewCell!
         
         let itemToDisplay: AnyObject = self.myInventory[indexPath.row]
         
@@ -86,7 +96,7 @@ class AllItemsTableViewController: UITableViewController {
     private func reloadData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
+        let itemFrequency = NSFetchRequest(entityName: CoreData.ItemEntity)
         
         var err: NSError?
         myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
@@ -95,15 +105,15 @@ class AllItemsTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-            case "addNew":
+            case Segues.AddNew:
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.hidesBottomBarWhenPushed = true
-            case "update":
+            case Segues.Update:
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)
                 myItemPageViewController.selectTitleAutomatically = false
                 myItemPageViewController.hidesBottomBarWhenPushed = true
-            case "toScanner":
+            case Segues.Scanner:
                 let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController
                 myScannerViewController.hidesBottomBarWhenPushed = true
             default: break

@@ -12,6 +12,36 @@ import UIKit
 import AVFoundation
 import CoreData
 
+public struct Defaults {
+    static let LastTagName = "lastTagNameSelected"
+    static let IndexOfCurrentItem = "indexOfCurrentItemInMyInventoryArray"
+}
+
+public struct CoreData {
+    static let ItemPhoto = "photoOfItem"
+    static let QRCodeData = "qrCodeImage"
+    static let ItemEntity = "InventoryItem"
+    static let TagEntity = "Tag"
+}
+
+public struct Notifications {
+    static let TagCreated = "Tag Created"
+}
+
+//Master list of all segue names for easier future maintenance - all prepareForSegues are based off structs that repackage these names to better describe the segue's purpose
+public struct AllSegues {
+    static let AddNewItem = "addNew"
+    static let UpdateItem = "update"
+    static let AlignText = "TextAlignment"
+    static let SelectTag = "TagSelection"
+    static let CreateTag = "TagCreation"
+    static let ScanItem = "toScanner"
+    static let BackToTableView = "toTableView"
+    static let FilteredItems = "filteredTaggedItems"
+    static let UpdateItemFromFiltered = "updateFromFiltered"
+    static let UpdateItemFromScanner = "toItemPage"
+}
+
 class Helper {
     
     init() {}

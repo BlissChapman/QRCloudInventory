@@ -13,12 +13,16 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
     
     @IBOutlet var tableView: UITableView!
     
+    private struct Segues {
+        static let CreateTag = AllSegues.CreateTag
+    }
+    
     var tags = [AnyObject]()
     var selectedTag = ""
     
     private var tagNames: String? {
-        get { return NSUserDefaults.standardUserDefaults().valueForKey("lastTagNameSelected") as? String }
-        set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "lastTagNameSelected")
+        get { return NSUserDefaults.standardUserDefaults().valueForKey(Defaults.LastTagName) as? String }
+        set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: Defaults.LastTagName)
             NSUserDefaults.standardUserDefaults().synchronize() }
     }
     
@@ -30,7 +34,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
         super.viewDidLoad()
         println("made it to viewDidLoad")
         reloadInfo()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: "Tag Created", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: Notifications.TagCreated, object: nil)
     }
     
     func reloadInfo() {
@@ -41,7 +45,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
     func reloadData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let tagFrequency = NSFetchRequest(entityName: "Tag")
+        let tagFrequency = NSFetchRequest(entityName: CoreData.TagEntity)
         
         var err: NSError?
         tags = context.executeFetchRequest(tagFrequency, error: &err)!
@@ -82,7 +86,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
         tagNames = tags[indexPath.row].name
         
         println("Name of the tag selected = \(tags[indexPath.row].name).  tagName now equals \(tagNames)")
-        println(NSUserDefaults.standardUserDefaults().valueForKey("lastTagNameSelected") as? String)
+        println(NSUserDefaults.standardUserDefaults().valueForKey(Defaults.LastTagName) as? String)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -129,14 +133,11 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
         return UIModalPresentationStyle.None
     }
     
-    
-    
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         println("about to segue with identifier \(segue.identifier)")
         if let identifier = segue.identifier {
             switch identifier {
-            case "TagCreation":
+            case Segues.CreateTag:
                 if let vc = segue.destinationViewController as? TagCreationViewController {
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self

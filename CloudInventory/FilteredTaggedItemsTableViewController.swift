@@ -16,7 +16,11 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
     var filteredResults: [AnyObject]?
     
     //var testArray = ["HI", "table views are funky", "core data is for losers"]
-
+    
+    private struct Segues {
+        static let UpdateItem = AllSegues.UpdateItemFromFiltered
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,32 +33,32 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
             println("# of results = \(filteredResults?.count)")
         }
     }
-
+    
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         println(filteredResults?.count)
         return filteredResults?.count ?? 0
     }
-
-/*var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
-if itemToDisplay is ItemCoreDataModel {
-let item = itemToDisplay as ItemCoreDataModel
-cell.cellTitle.text = itemToDisplay.title
-cell.backgroundImage.image = UIImage(data: item.photoOfItem)
-*/
-
+    
+    /*var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
+    if itemToDisplay is ItemCoreDataModel {
+    let item = itemToDisplay as ItemCoreDataModel
+    cell.cellTitle.text = itemToDisplay.title
+    cell.backgroundImage.image = UIImage(data: item.photoOfItem)
+    */
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customTaggedItemViewCell") as! CustomItemTableViewCell!
         
-//        var title: String = testArray[indexPath.row]
-//        println("title should be: \(title)")
-//        customCell.cellTitle.text = title
-//        customCell.backgroundImage.image = UIImage()
+        //        var title: String = testArray[indexPath.row]
+        //        println("title should be: \(title)")
+        //        customCell.cellTitle.text = title
+        //        customCell.backgroundImage.image = UIImage()
         
         if let itemToDisplay = self.filteredResults?[indexPath.row] as? ItemCoreDataModel {
             println("should be ok")
@@ -63,11 +67,11 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
                 cell.backgroundImage.image = UIImage(data: itemToDisplay.photoOfItem!)
             }
         }
-    
+        
         return cell
     }
     
-
+    
     
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -91,7 +95,7 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
             }
         }
     }
-
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
@@ -103,31 +107,33 @@ cell.backgroundImage.image = UIImage(data: item.photoOfItem)
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
+    
     }
     */
-
+    
     /*
     // Override to support conditional rearranging of the table view.
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
+    // Return NO if you do not want the item to be re-orderable.
+    return true
     }
     */
-
+    
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "updateFromFiltered" {
-            var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel
-            let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
-            myItemPageViewController.existingItem = selectedItem
-            myItemPageViewController.selectTitleAutomatically = false
-            myItemPageViewController.hidesBottomBarWhenPushed = true
+        if let identifier = segue.identifier {
+            switch identifier {
+            case Segues.UpdateItem :
+                var selectedItem: ItemCoreDataModel = filteredResults![self.tableView.indexPathForSelectedRow()!.row] as! ItemCoreDataModel
+                let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
+                myItemPageViewController.existingItem = selectedItem
+                myItemPageViewController.selectTitleAutomatically = false
+                myItemPageViewController.hidesBottomBarWhenPushed = true
+            default: break
+            }
         }
     }
-    
-
 }

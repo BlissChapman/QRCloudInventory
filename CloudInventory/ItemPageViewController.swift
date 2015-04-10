@@ -15,6 +15,12 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var actionButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
+    
+    private struct Segues {
+        static let TextAlignment = AllSegues.AlignText
+        static let SelectTag = AllSegues.SelectTag
+    }
+    
     var selectTitleAutomatically = true
     
     //All properties for updating an existing item's info - property observers update ui as necessary
@@ -56,13 +62,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     private var tagNames: String? {
-        get { return NSUserDefaults.standardUserDefaults().valueForKey("lastTagNameSelected") as? String }
-        set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "lastTagNameSelected")
+        get { return NSUserDefaults.standardUserDefaults().valueForKey(Defaults.LastTagName) as? String }
+        set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: Defaults.LastTagName)
             NSUserDefaults.standardUserDefaults().synchronize() }
     }
     var indexOfCurrentItemInMyInventoryArray: Int? {
-        get { return NSUserDefaults.standardUserDefaults().valueForKey("indexOfCurrentItemInMyInventoryArray") as? Int
-        } set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "indexOfCurrentItemInMyInventoryArray")
+        get { return NSUserDefaults.standardUserDefaults().valueForKey(Defaults.IndexOfCurrentItem) as? Int
+        } set { NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: Defaults.IndexOfCurrentItem)
             NSUserDefaults.standardUserDefaults().synchronize() }
     }
     
@@ -79,8 +85,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemTitle = existingItem?.title
             itemSubtitle = existingItem?.subtitle
             itemNotes = existingItem?.notes
-            itemPhoto = existingItem!.valueForKey("photoOfItem") as? NSData
-            itemQrCodeNSData = existingItem!.valueForKey("qrCodeImage") as? NSData
+            itemPhoto = existingItem!.valueForKey(CoreData.ItemPhoto) as? NSData
+            itemQrCodeNSData = existingItem!.valueForKey(CoreData.QRCodeData) as? NSData
             tagNames = existingItem!.tags
         }
         saveButton.title = "Done"
@@ -97,7 +103,7 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         var myInventory = [AnyObject]()
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
-        let itemFrequency = NSFetchRequest(entityName: "InventoryItem")
+        let itemFrequency = NSFetchRequest(entityName: CoreData.ItemEntity)
         var err: NSError?
         myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
         
@@ -105,28 +111,24 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
             itemTitle = existingItem.title
             itemSubtitle = existingItem.subtitle
             itemNotes = existingItem.notes
-            itemPhoto = existingItem.valueForKey("photoOfItem") as? NSData
-            itemQrCodeNSData = existingItem.valueForKey("qrCodeImage") as? NSData
+            itemPhoto = existingItem.valueForKey(CoreData.ItemPhoto) as? NSData
+            itemQrCodeNSData = existingItem.valueForKey(CoreData.QRCodeData) as? NSData
             tagNames = existingItem.tags
         }
-        
-//        if existingItem != nil {
-//            
-//        }
     }
     
     // MARK: - IBActions
     @IBAction private func saveTapped(sender: AnyObject) {
         saveAll()
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastTagNameSelected")
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: Defaults.LastTagName)
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: Defaults.IndexOfCurrentItem)
         NSUserDefaults.standardUserDefaults().synchronize()
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
     @IBAction private func cancelTapped(sender: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "lastTagNameSelected")
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "indexOfCurrentItemInMyInventoryArray")
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: Defaults.LastTagName)
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: Defaults.IndexOfCurrentItem)
         NSUserDefaults.standardUserDefaults().synchronize()
         
         navigationController?.popToRootViewControllerAnimated(true)
@@ -180,8 +182,8 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
         
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
-        let myEntity = NSEntityDescription.entityForName("InventoryItem", inManagedObjectContext: myContext)
-        let frequency = NSFetchRequest(entityName: "InventoryItem")
+        let myEntity = NSEntityDescription.entityForName(CoreData.ItemEntity, inManagedObjectContext: myContext)
+        let frequency = NSFetchRequest(entityName: CoreData.ItemEntity)
         
         var qrCodeImageToSave: NSData?
         
@@ -347,13 +349,13 @@ class ItemPageViewController: UIViewController, UIImagePickerControllerDelegate,
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-            case "TextAlignment":
+            case Segues.TextAlignment:
                 if let vc = segue.destinationViewController as? TextAlignmentViewController {
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self
                     }
                 }
-            case "TagSelection":
+            case Segues.SelectTag:
                 if let vc = segue.destinationViewController as? TagSelectionTableViewController {
                     if let ppc = vc.popoverPresentationController {
                         ppc.delegate = self

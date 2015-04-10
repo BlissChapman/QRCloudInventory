@@ -26,6 +26,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
             NSUserDefaults.standardUserDefaults().synchronize() }
     }
     
+    // MARK: - View Controller Lifecycle
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
     }
@@ -59,7 +60,7 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
         }
     }
     
-    // MARK: - Table view data source
+    // MARK: - Table View Configuration
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -125,14 +126,13 @@ class TagSelectionTableViewController: UIViewController, UITableViewDataSource, 
     }
     */
     
-    // MARK: - Navigation
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    //popover delegate
+    // MARK: - Popover Delegate
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
     
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         println("about to segue with identifier \(segue.identifier)")
         if let identifier = segue.identifier {

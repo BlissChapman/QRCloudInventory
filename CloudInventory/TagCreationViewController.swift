@@ -11,21 +11,23 @@ import CoreData
 
 class TagCreationViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var nameTextField: UITextField!
-    
+    @IBOutlet weak var nameTextField: UITextField! {
+        didSet {
+            nameTextField!.delegate = self
+            nameTextField.becomeFirstResponder()
+        }
+    }
     var newTag: TagCoreDataModel?
     var tags = [AnyObject]()
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        nameTextField.delegate = self
         self.preferredContentSize = CGSizeMake(nameTextField.frame.width, nameTextField.frame.height)
         checkData()
-        nameTextField.becomeFirstResponder()
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if let tagName = nameTextField.text {
             if tags.count == 0 {
@@ -48,7 +50,7 @@ class TagCreationViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
-    func createTag(name: String) {
+    private func createTag(name: String) {
         let myAppDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let myContext: NSManagedObjectContext = myAppDelegate.managedObjectContext!
         let myEntity = NSEntityDescription.entityForName(CoreData.TagEntity, inManagedObjectContext: myContext)
@@ -65,7 +67,7 @@ class TagCreationViewController: UIViewController, UITextFieldDelegate {
         println("posted notification")
     }
     
-    func checkData() {
+    private func checkData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let tagFrequency = NSFetchRequest(entityName: CoreData.TagEntity)

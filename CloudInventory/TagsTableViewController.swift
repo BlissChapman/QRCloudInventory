@@ -30,17 +30,12 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadInfo", name: "Tag Created", object: nil)
     }
     
-    func reloadInfo() {
+    private func reloadInfo() {
         reloadData()
         self.tableView.reloadData()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    func reloadData() {
+    private func reloadData() {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
         let itemFrequency = NSFetchRequest(entityName: CoreData.ItemEntity)
@@ -50,12 +45,12 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
         myTags = context.executeFetchRequest(tagFrequency, error: &err)!
     }
 
+    // MARK: - Popover Delgate
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
     
-    // MARK: - Table view data source
-
+    // MARK: - Table View Configuration
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -133,9 +128,8 @@ class TagsTableViewController: UITableViewController, UIPopoverPresentationContr
     */
 
     
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {

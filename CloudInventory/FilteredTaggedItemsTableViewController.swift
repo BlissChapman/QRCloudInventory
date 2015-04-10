@@ -34,7 +34,7 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Table view data source
+    // MARK: - Table View Configuration
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -43,13 +43,6 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
         println(filteredResults?.count)
         return filteredResults?.count ?? 0
     }
-    
-    /*var cell: CustomItemTableViewCell = tableView.dequeueReusableCellWithIdentifier("customItemTableViewCell") as CustomItemTableViewCell!
-    if itemToDisplay is ItemCoreDataModel {
-    let item = itemToDisplay as ItemCoreDataModel
-    cell.cellTitle.text = itemToDisplay.title
-    cell.backgroundImage.image = UIImage(data: item.photoOfItem)
-    */
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -71,14 +64,10 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
         return cell
     }
     
-    
-    
-    // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
     
-    // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDelegate.managedObjectContext!
@@ -121,8 +110,6 @@ class FilteredTaggedItemsTableViewController: UITableViewController {
     
     
     // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {

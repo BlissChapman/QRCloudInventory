@@ -18,9 +18,9 @@ class AllItemsTableViewController: UITableViewController {
     }
     
     private struct Segues {
-        static let AddNew = AllSegues.AddNewItem
-        static let Update = AllSegues.UpdateItem
-        static let Scanner = AllSegues.ScanItem
+        static let AddNewItem = AllSegues.AddNewItem
+        static let UpdateItem = AllSegues.UpdateItem
+        static let ScanCode = AllSegues.ScanItem
     }
     
     // MARK: - View Controller Lifecycle
@@ -102,18 +102,19 @@ class AllItemsTableViewController: UITableViewController {
         myInventory = context.executeFetchRequest(itemFrequency, error: &err)!
     }
 
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-            case Segues.AddNew:
+            case Segues.AddNewItem:
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.hidesBottomBarWhenPushed = true
-            case Segues.Update:
+            case Segues.UpdateItem:
                 let myItemPageViewController: ItemPageViewController = segue.destinationViewController as! ItemPageViewController
                 myItemPageViewController.indexOfCurrentItemInMyInventoryArray = (self.tableView.indexPathForSelectedRow()!.row)
                 myItemPageViewController.selectTitleAutomatically = false
                 myItemPageViewController.hidesBottomBarWhenPushed = true
-            case Segues.Scanner:
+            case Segues.ScanCode:
                 let myScannerViewController: ScannerViewController = segue.destinationViewController as! ScannerViewController
                 myScannerViewController.hidesBottomBarWhenPushed = true
             default: break

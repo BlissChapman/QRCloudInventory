@@ -153,6 +153,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         presentViewController(noCameraAlert, animated: true, completion: nil)
     }
     
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
